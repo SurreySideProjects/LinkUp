@@ -4,17 +4,17 @@ import './NavBar.css'
 function NavBar() {
   return (
     <nav className='nav-bar'>
-        <p>PartyVerse</p>
+        <p id='logo'>PartyVerse</p>
         <div className='nav-bar-center'>
             <ul className="nav-links">
                 <li>
-                    <a href="/products">Link 1</a>
+                    <a href="/link1">Link 1</a>
                 </li>
                 <li>
-                    <a href="/about">Link 2</a>
+                    <a href="/link2">Link 2</a>
                 </li>
                 <li>
-                    <a href="/contact">Link 3</a>
+                    <a href="/link3">Link 3</a>
                 </li>
             </ul>
         </div>
