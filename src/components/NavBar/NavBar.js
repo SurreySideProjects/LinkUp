@@ -3,9 +3,9 @@ import './NavBar.css'
 
 function NavBar() {
   return (
-    <nav className='nav-bar'>
+    <nav className='navbar'>
         <p id='logo'>PartyVerse</p>
-        <div className='nav-bar-center'>
+        <div className='navbar-center'>
             <ul className="nav-links">
                 <li>
                     <a href="/link1">Link 1</a>
