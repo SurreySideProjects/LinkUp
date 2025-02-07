@@ -1,6 +1,7 @@
 import hashlib
 import datetime
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from pymongo import MongoClient
 import os
@@ -11,6 +12,7 @@ MONGO_URL = os.getenv('MONGO_URL')
 SECRET_KEY = os.getenv('JWT_KEY')
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins='*', headers=['Content-Type', 'Authorization'], expose_headers='Authorization')
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=7) #Token expires in 7 days
@@ -44,8 +46,8 @@ def login():
 
 	return jsonify({'msg': 'The username or password is incorrect'}), 401
 
-@app.route("/api/v1/user", methods=["GET"])
-@jwt_required
+@app.route("/api/v1/user", methods=["GET", "POST"])
+@jwt_required(optional=True)
 def profile():
 	current_user = get_jwt_identity() # Get the identity of the current user
 	user_from_db = users_collection.find_one({'username' : current_user})
