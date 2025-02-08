@@ -12,6 +12,7 @@ root.render(
     <Routes>
         <Route path="/" element={<App />}/>
         <Route path="/login" element={<Login />}/>
+        <Route path="/register" element={<Login />}/>
         <Route path="*" element={<NoPage />} />
     </Routes>
   </BrowserRouter>
