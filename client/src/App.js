@@ -17,10 +17,10 @@ const App = () => {
         navigate("/login");
       }
       else {
+      console.log("token", cookies.token)
       await axios.get(
         "http://localhost:5000/api/v1/user",
-        {},
-        { withCredentials: true, headers: { Authorization : `Bearer ${cookies.token}`} }
+        { withCredentials: true, headers: { 'Authorization': `Bearer ${cookies.token}`} }
       ).then(response => {
         const { user } = response;
         setUsername(user);
@@ -29,7 +29,7 @@ const App = () => {
           });
       })
       .catch(error => {
-        console.log("Please login again!")
+        console.log("Please login again!", error)
         return removeCookie("token"), navigate("/login");
       });
     }
