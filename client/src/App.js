@@ -41,9 +41,12 @@ const App = () => {
     navigate("/signup");
   };
   return (
-    <div>
-      <NavBar/>
-    </div>
+    <>
+      <img id='back' src='background.svg'/>
+      <div className='app'>
+        <NavBar/>
+      </div>
+    </>
   );
 };
 

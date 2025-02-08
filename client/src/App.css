@@ -1,1 +1,8 @@
+#back {
+    position: fixed;
+    z-index: -1;
+}
 
+.app {
+    z-index: 1;
+}
