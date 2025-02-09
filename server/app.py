@@ -107,6 +107,16 @@ def createGroupUser():
 	else: 
 		return jsonify({'msg': 'Error while adding user to group. User was not added.'}), 409
 
+@app.route("/api/v1/getGroups", methods=["get"])
+def get_groups():
+	groups = list(groups_collection.find())
+	if groups:
+		for group in groups:
+			group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+			del group["_id"], group["userID"]
+		return jsonify(groups), 200
+	return jsonify({'msg': 'No groups exist.'}), 409
+
 
 
 if __name__ == '__main__':
