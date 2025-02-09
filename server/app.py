@@ -21,6 +21,8 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=7) #Token expir
 client = MongoClient(MONGO_URL)
 db = client["PartyVerse"]
 users_collection = db["users"]
+groups_collection = db["groups"]
+groupUsers_collection = db["groupUsers"]
 
 @app.route("/api/v1/users", methods=["POST"])
 def register():
@@ -56,6 +58,31 @@ def profile():
 		return jsonify({'profile' : user_from_db }), 200
 	else:
 		return jsonify({'msg': 'Profile not found'}), 404
+
+
+@app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
+def createGroup():
+	new_group = request.get_json()
+	doc = groups_collection.find_one({"name": new_group["name"]}) # check if group exist
+	creater = users_collection.find_one({'username' : new_group["username"]})
+	new_group["userID"] = creater["_id"]
+	new_group["numOfMembers"] = 1
+
+	
+	if not doc:
+		del new_group["username"]
+		result = groups_collection.insert_one(new_group)
+		new_groupUser = { 
+			"group_id": result.inserted_id,
+			"user_id": creater["_id"],
+			"role": "admin",
+		}
+		groupUsers_collection.insert_one(new_groupUser)
+		return jsonify({'msg': 'Group was created successfully'}), 201
+	else:
+		return jsonify({'msg': 'Group name already exists'}), 409
+
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
