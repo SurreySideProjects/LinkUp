@@ -9,6 +9,8 @@ import './Register.css';
 const Register = () => {
   const navigate = useNavigate();
   const [token, setToken] = useCookies(['token']);
+  const [userMessage, setUserMessage] = useState("")
+
   const [inputValue, setInputValue] = useState({
     username: "",
     password: "",
@@ -51,13 +53,15 @@ const Register = () => {
       ).then(response => {
         setToken('token', response.data.access_token)
         console.log("Registered", response.data.access_token)
-        const message = "Register successful! Now login using your just created account details";
+        const message = "Register successful!";
         handleSuccess(message);
+        setUserMessage("Now login using your newly created login details")
         setTimeout(() => {
           navigate("/login");
         }, 3250);
       })
       .catch(error => {
+        setUserMessage("Username Already exists")
         console.log("Username Already exists")
         handleError(error);
       });
@@ -99,6 +103,7 @@ const Register = () => {
             />
             </div>
             <button type="submit">Submit</button>
+            {userMessage && <p>{userMessage}</p>}
             <span>
             Already have an account? <Link to={"/login"}>Login</Link>
             </span>
