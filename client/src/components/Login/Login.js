@@ -8,6 +8,8 @@ import './Login.css';
 const Login = () => {
   const navigate = useNavigate();
   const [token, setToken] = useCookies(['token']);
+  const [userMessage, setUserMessage] = useState("")
+
   const [inputValue, setInputValue] = useState({
     username: "",
     password: "",
@@ -49,6 +51,7 @@ const Login = () => {
         }, 1000);
       })
       .catch(error => {
+        setUserMessage("Wrong username or password")
         console.log("wrong password")
         handleError(error);
       });
@@ -88,6 +91,7 @@ const Login = () => {
             />
             </div>
             <button type="submit">Submit</button>
+            {userMessage && <p>{userMessage}</p>}
             <span>
             You don't have an account yet? <Link to={"/register"}>Register</Link>
             </span>
