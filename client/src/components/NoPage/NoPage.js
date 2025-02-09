@@ -1,8 +1,15 @@
 import React from 'react'
+import NavBar from '../NavBar/NavBar'
 
 function NoPage() {
   return (
-    <div>Oops, page not found!</div>
+    <>
+      <img id='back' src='background.svg'/>
+      <NavBar/>
+      <div className='app' style={{color: "red"}}>
+        Oops, page not found 
+      </div>
+    </>
   )
 }
 
