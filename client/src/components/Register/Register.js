@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import './Register.css';
 
+
 const Register = () => {
   const navigate = useNavigate();
   const [token, setToken] = useCookies(['token']);
@@ -30,6 +31,14 @@ const Register = () => {
       position: "bottom-left",
     });
 
+
+    // const schema = object().shape({
+    //     name: string().required('Name is required'),
+    //     email: string().email().required('Email is required'),
+    //     message: string().required('Message is required')
+    // });
+//   const { register, handleSubmit, formState: { errors } } = useForm({resolver: yupResolver(schema)});
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -42,11 +51,11 @@ const Register = () => {
       ).then(response => {
         setToken('token', response.data.access_token)
         console.log("Registered", response.data.access_token)
-        const message = "Register successful!";
+        const message = "Register successful! Now login using your just created account details";
         handleSuccess(message);
         setTimeout(() => {
           navigate("/login");
-        }, 1000);
+        }, 3250);
       })
       .catch(error => {
         console.log("Username Already exists")
@@ -73,8 +82,9 @@ const Register = () => {
                 type="username"
                 name="username"
                 value={username}
-                placeholder="Enter your email"
+                placeholder="Enter your username" 
                 onChange={handleOnChange}
+                required
             />
             </div>
             <div>
@@ -85,6 +95,7 @@ const Register = () => {
                 value={password}
                 placeholder="Enter your password"
                 onChange={handleOnChange}
+                required
             />
             </div>
             <button type="submit">Submit</button>
