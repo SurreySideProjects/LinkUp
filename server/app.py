@@ -82,6 +82,31 @@ def createGroup():
 	else:
 		return jsonify({'msg': 'Group name already exists'}), 409
 
+@app.route("/api/v1/addUserToGroup", methods=["POST"])
+def createGroupUser():
+	new_groupUser = request.get_json()
+
+	new_groupUser["groupID"] = groups_collection.find_one({"name": new_groupUser["groupname"]})["_id"]  # this must change if groupname is not unique!!
+	new_groupUser["userID"] = users_collection.find_one({"username": new_groupUser["username"]})["_id"]
+	
+	if not new_groupUser.get("role"):
+		new_groupUser["role"] = "member"
+	
+	result = groupUsers_collection.find_one({"groupID": new_groupUser["groupID"], "userID": new_groupUser["userID"]})
+	print(not result)
+	if not result and (new_groupUser["groupID"] or new_groupUser["userID"]): # if there isnt a groupUser with identical ID's, and ID's actually exist
+		del new_groupUser["groupname"], new_groupUser["username"]
+		groupUsers_collection.insert_one(new_groupUser)
+
+		groups_collection.update_one(
+			{"_id": new_groupUser["groupID"]},
+			{"$inc": {"numOfMembers": 1}}
+		)
+
+		return jsonify({'msg': 'User was successfully added to the Group'}), 201
+	else: 
+		return jsonify({'msg': 'Error while adding user to group. User was not added.'}), 409
+
 
 
 if __name__ == '__main__':
