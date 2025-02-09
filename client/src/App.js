@@ -38,7 +38,7 @@ const App = () => {
   }, [cookies, navigate, removeCookie]);
   const Logout = () => {
     removeCookie("token");
-    navigate("/signup");
+    navigate("/register");
   };
   return (
     <>

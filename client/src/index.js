@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NoPage from './components/NoPage/NoPage';
 import Login from './components/Login/Login';
+import Register from './components/Register/Register';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +13,7 @@ root.render(
     <Routes>
         <Route path="/" element={<App />}/>
         <Route path="/login" element={<Login />}/>
-        <Route path="/register" element={<Login />}/>
+        <Route path="/register" element={<Register />}/>
         <Route path="*" element={<NoPage />} />
     </Routes>
   </BrowserRouter>
