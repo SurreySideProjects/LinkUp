@@ -8,7 +8,7 @@ function NavBar() {
         <div className='navbar-center'>
             <ul className="nav-links">
                 <li>
-                    <a href="/link1">Link 1</a>
+                    <a href="/groups">Groups</a>
                 </li>
                 <li>
                     <a href="/link2">Link 2</a>
