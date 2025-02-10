@@ -73,8 +73,8 @@ def createGroup():
 		del new_group["username"]
 		result = groups_collection.insert_one(new_group)
 		new_groupUser = { 
-			"group_id": result.inserted_id,
-			"user_id": creater["_id"],
+			"groupID": result.inserted_id,
+			"userID": creater["_id"],
 			"role": "admin",
 		}
 		groupUsers_collection.insert_one(new_groupUser)
