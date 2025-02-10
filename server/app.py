@@ -61,6 +61,7 @@ def profile():
 
 
 @app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
+@jwt_required()
 def createGroup():
 	new_group = request.get_json()
 	doc = groups_collection.find_one({"name": new_group["name"]}) # check if group exist
@@ -83,6 +84,7 @@ def createGroup():
 		return jsonify({'msg': 'Group name already exists'}), 409
 
 @app.route("/api/v1/addUserToGroup", methods=["POST"])
+@jwt_required(optional=True)
 def createGroupUser():
 	new_groupUser = request.get_json()
 
