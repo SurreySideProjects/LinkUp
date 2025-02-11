@@ -50,7 +50,6 @@ def login():
 @jwt_required(optional=True)
 def profile():
 	current_user = get_jwt_identity() # Get the identity of the current user
-	print(current_user)
 	user_from_db = users_collection.find_one({'username' : current_user})
 	if user_from_db:
 		del user_from_db['_id'], user_from_db['password'] # delete data we don't want to return
