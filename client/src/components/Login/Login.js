@@ -71,12 +71,12 @@ const Login = () => {
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
             <div>
-            <label htmlFor="username">Email</label>
+            <label htmlFor="username">Username</label>
             <input
                 type="username"
                 name="username"
                 value={username}
-                placeholder="Enter your email"
+                placeholder="Enter your username"
                 onChange={handleOnChange}
             />
             </div>
