@@ -23,6 +23,27 @@
     text-decoration: none;
   }
 
+.logout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.logout span {
+  width: 1rem;
+}
+
+.logout button {
+  background: none;
+  border: none;
+  border-radius: 10%;
+}
+
+.logout button:hover {
+  background: rgb(110, 8, 56);
+}
+
 #logo {
     padding-left: 1rem;
 }

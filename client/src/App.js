@@ -5,11 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { PiHandPalmThin } from "react-icons/pi";
 
 const App = () => {
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
+
+  const welcomeMsg = (msg) =>
+    toast(msg, {icon: <PiHandPalmThin size={50}/>});
+
   useEffect(() => {
     const verifyCookie = async () => {
       if (cookies.token === "undefined") {
@@ -17,16 +22,14 @@ const App = () => {
         navigate("/login");
       }
       else {
-      console.log("token", cookies.token)
       await axios.get(
         "http://localhost:5000/api/v1/user",
         { withCredentials: true, headers: { 'Authorization': `Bearer ${cookies.token}`} }
       ).then(response => {
-        const { user } = response;
+        const user = response.data.profile;
         setUsername(user);
-        return toast(`Hello ${user}`, {
-            position: "top-right",
-          });
+        welcomeMsg(`Welcome ${user}`)
+        console.log("hey")
       })
       .catch(error => {
         console.log("Please login again!", error)
@@ -36,15 +39,13 @@ const App = () => {
     };
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
-  const Logout = () => {
-    removeCookie("token");
-    navigate("/register");
-  };
+
   return (
     <>
       <img id='back' src='background.svg'/>
       <div className='app'>
-        <NavBar/>
+        <NavBar username={username}/>
+        <ToastContainer/>
       </div>
     </>
   );
