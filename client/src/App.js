@@ -1,5 +1,6 @@
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
+import MapP from './components/Map/MapP';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -45,6 +46,7 @@ const App = () => {
       <img id='back' src='background.svg'/>
       <div className='app'>
         <NavBar username={username}/>
+        <MapP/>
         <ToastContainer/>
       </div>
     </>
