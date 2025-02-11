@@ -42,6 +42,7 @@
 
 .logout button:hover {
   background: rgb(110, 8, 56);
+  cursor: pointer;
 }
 
 #logo {
