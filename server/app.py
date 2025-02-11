@@ -52,7 +52,7 @@ def profile():
 	user_from_db = users_collection.find_one({'username' : current_user})
 	if user_from_db:
 		del user_from_db['_id'], user_from_db['password'] # delete data we don't want to return
-		return jsonify({'profile' : user_from_db }), 200
+		return jsonify({'profile' : user_from_db['username'] }), 200
 	else:
 		return jsonify({'msg': 'Profile not found'}), 404
 

@@ -1,7 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { IoIosLogOut } from "react-icons/io";
 import './NavBar.css'
+import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
 
-function NavBar() {
+function NavBar({username}) {
+    const navigate = useNavigate();
+    const [cookies, removeCookie] = useCookies([]);
+    const Logout = () => {
+        removeCookie("token");
+        navigate("/login");
+      };
+
+    useEffect(() => {
+        console.log(username)
+    }, [username]); 
   return (
     <nav className='navbar'>
         <p id='logo'>PartyVerse</p>
@@ -18,13 +31,10 @@ function NavBar() {
                 </li>
             </ul>
         </div>
-        <div>
-            <a href='/login'>
-                <button>Login</button>
-            </a>
-            <a href='/register'>
-                <button>Register</button>
-            </a>
+        <div className='logout'>
+            <p>Welcome {username}</p>
+            <span></span>
+            <button onClick={Logout}><IoIosLogOut size={30}/></button>
         </div>
     </nav>
   )

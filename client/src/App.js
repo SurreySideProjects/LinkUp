@@ -17,14 +17,13 @@ const App = () => {
         navigate("/login");
       }
       else {
-      console.log("token", cookies.token)
       await axios.get(
         "http://localhost:5000/api/v1/user",
         { withCredentials: true, headers: { 'Authorization': `Bearer ${cookies.token}`} }
       ).then(response => {
-        const { user } = response;
+        const user = response.data.profile;
         setUsername(user);
-        return toast(`Hello ${user}`, {
+        return toast(`Goodbye ${user}`, {
             position: "top-right",
           });
       })
@@ -36,15 +35,12 @@ const App = () => {
     };
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
-  const Logout = () => {
-    removeCookie("token");
-    navigate("/register");
-  };
+
   return (
     <>
       <img id='back' src='background.svg'/>
       <div className='app'>
-        <NavBar/>
+        <NavBar username={username}/>
       </div>
     </>
   );
