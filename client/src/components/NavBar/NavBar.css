@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -46,5 +48,8 @@
 }
 
 #logo {
-    padding-left: 1rem;
+  font-family: bebas neue, sans-serif;;
+  font-size: 2rem;
+  padding-left: 1rem;
+  margin: 0rem;
 }
