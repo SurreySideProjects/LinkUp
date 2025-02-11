@@ -33,7 +33,7 @@ const App = () => {
       })
       .catch(error => {
         console.log("Please login again!", error)
-        return removeCookie("token"), navigate("/login");
+        return [removeCookie("token"), navigate("/login")];
       });
     }
     };
@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <>
-      <img id='back' src='background.svg'/>
+      <img id='back' alt='' src='background.svg'/>
       <div className='app'>
         <NavBar username={username}/>
         <ToastContainer/>

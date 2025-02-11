@@ -4,7 +4,7 @@ import NavBar from '../NavBar/NavBar'
 function NoPage() {
   return (
     <>
-      <img id='back' src='background.svg'/>
+      <img id='back' alt='' src='background.svg'/>
       <NavBar/>
       <div className='app' style={{color: "red"}}>
         Oops, page not found 
