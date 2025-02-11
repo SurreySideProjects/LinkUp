@@ -32,7 +32,7 @@ function NavBar({username}) {
             </ul>
         </div>
         <div className='logout'>
-            <p>Welcome {username}</p>
+            <p>{username}</p>
             <span></span>
             <button onClick={Logout}><IoIosLogOut size={30}/></button>
         </div>

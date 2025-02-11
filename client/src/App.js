@@ -5,11 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { PiHandPalmThin } from "react-icons/pi";
 
 const App = () => {
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
+
+  const welcomeMsg = (msg) =>
+    toast(msg, {icon: <PiHandPalmThin size={50}/>});
+
   useEffect(() => {
     const verifyCookie = async () => {
       if (cookies.token === "undefined") {
@@ -23,9 +28,8 @@ const App = () => {
       ).then(response => {
         const user = response.data.profile;
         setUsername(user);
-        return toast(`Goodbye ${user}`, {
-            position: "top-right",
-          });
+        welcomeMsg(`Welcome ${user}`)
+        console.log("hey")
       })
       .catch(error => {
         console.log("Please login again!", error)
@@ -41,6 +45,7 @@ const App = () => {
       <img id='back' src='background.svg'/>
       <div className='app'>
         <NavBar username={username}/>
+        <ToastContainer/>
       </div>
     </>
   );
