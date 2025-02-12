@@ -9,3 +9,16 @@
     padding: 20px;
     box-sizing: border-box;
   }
+
+.inner{
+  width: 100%;
+  height: 60vh; /* Takes up 90% of viewport height */
+  margin-top: 30px; /* Assuming nav bar height is 60px, adjust as needed */
+  /* margin-left: 20px; */
+  /* border-radius: 12px; */
+  background-color: #ed5555; /* Light gray background, adjust color as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+  /* padding: 20px; */
+  box-sizing: border-box;
+
+}
