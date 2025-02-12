@@ -11,10 +11,6 @@ function NavBar({username}) {
         removeCookie("token");
         navigate("/login");
       };
-
-    useEffect(() => {
-        console.log(username)
-    }, [username]); 
   return (
     <nav className='navbar'>
         <p id='logo'>PartyVerse</p>

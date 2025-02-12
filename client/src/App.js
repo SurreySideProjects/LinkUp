@@ -30,7 +30,6 @@ const App = () => {
         const user = response.data.profile;
         setUsername(user);
         welcomeMsg(`Welcome ${user}`)
-        console.log("hey")
       })
       .catch(error => {
         console.log("Please login again!", error)
