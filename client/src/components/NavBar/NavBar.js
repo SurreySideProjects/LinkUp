@@ -17,7 +17,7 @@ function NavBar({username}) {
     }, [username]); 
   return (
     <nav className='navbar'>
-        <p id='logo'>PartyVerse</p>
+        <p id='logo'>LinkUp</p>
         <div className='navbar-center'>
             <ul className="nav-links">
                 <li>
