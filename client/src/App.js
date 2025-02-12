@@ -1,5 +1,6 @@
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
+import MapP from './components/Map/MapP';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -29,7 +30,6 @@ const App = () => {
         const user = response.data.profile;
         setUsername(user);
         welcomeMsg(`Welcome ${user}`)
-        console.log("hey")
       })
       .catch(error => {
         console.log("Please login again!", error)
@@ -45,6 +45,7 @@ const App = () => {
       <img id='back' alt='' src='background.svg'/>
       <div className='app'>
         <NavBar username={username}/>
+        <MapP/>
         <ToastContainer/>
       </div>
     </>
