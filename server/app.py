@@ -59,8 +59,15 @@ def profile():
 		return jsonify({'msg': 'Profile not found'}), 404
 
 
+
+
+
+
+
+
+
 @app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
-@jwt_required()
+# @jwt_required()
 def createGroup():
 	new_group = request.get_json()
 	doc = groups_collection.find_one({"name": new_group["name"]}) # check if group exist
@@ -108,7 +115,7 @@ def createGroupUser():
 	else: 
 		return jsonify({'msg': 'Error while adding user to group. User was not added.'}), 409
 
-@app.route("/api/v1/getGroups", methods=["get"])
+@app.route("/api/v1/getGroups", methods=["GET"])
 def get_groups():
 	groups = list(groups_collection.find())
 	if groups:
@@ -116,6 +123,34 @@ def get_groups():
 			group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
 			del group["_id"], group["userID"]
 		return jsonify(groups), 200
+	return jsonify({'msg': 'No groups exist.'}), 409
+
+@app.route("/api/v1/getGroup", methods=["GET"])
+def get_group():
+	name = request.args.get("name")
+	group = groups_collection.find_one({"name": name})
+	if group:
+		group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+		del group["_id"], group["userID"]
+		return jsonify(group), 200
+	return jsonify({'msg': 'This group does not exist. Group name could not be found.'}), 409
+
+@app.route("/api/v1/searchGroups", methods=["GET"])
+def search_groups():
+	search = request.args.get("search")
+	groups = list(groups_collection.find())
+	output = []
+	if groups and search:
+		for group in groups:
+			if search in group["name"]: 
+				group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+				del group["_id"], group["userID"]
+				output.append(group)
+			elif search in group["description"]: 
+				group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+				del group["_id"], group["userID"]
+				output.append(group)
+		return jsonify(output), 200
 	return jsonify({'msg': 'No groups exist.'}), 409
 
 
