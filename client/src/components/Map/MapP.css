@@ -1,0 +1,10 @@
+.map {
+    position: relative;
+    top: 5rem;
+    left: calc(80vw - 10rem);
+}
+
+.leaflet-container {
+    width: 30rem;
+    height: 30rem;
+  }
