@@ -6,7 +6,7 @@ import { UNSAFE_createClientRoutesWithHMRRevalidationOptOut } from 'react-router
 
 function Groups() {
 
-  const [isSearch, switchSearch] = useState(true)
+  const [isSearch, setIsSearch] = useState(true)
   const [inputSearch, setInputSearch] = useState({
     search: ""
   })
@@ -28,10 +28,13 @@ function Groups() {
   const handleSubmitSearch = async (e) => {
     console.log(search)
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         "http://localhost:5000/api/v1/searchGroups", 
         {
-          ...inputSearch
+          // ...inputSearch // if axios.post
+          params: {
+            "search": search.search
+          }
         },
         { withCredentials: true }
       );
@@ -54,6 +57,7 @@ function Groups() {
         { withCredentials: true }
       );
       setGroupData(response.data)
+      setIsSearch(!isSearch)
       console.log(response.data)
     } catch (error) {
       console.log(error);
@@ -68,8 +72,8 @@ function Groups() {
       <img id='back' src='background.svg'/>
       <NavBar/>
       <div className='container'>
-        <button type='button' onClick={() => switchSearch( (prev) => !prev)}>Inspect</button>
-        <button type='button' onClick={() => switchSearch( (prev) => !prev)}>Search</button>
+        <button type='button' onClick={() => setIsSearch((prev) => !prev)}>Inspect</button>
+        <button type='button' onClick={() => setIsSearch((prev) => !prev)}>Search</button>
         
         <p>{isSearch ? "Searching" : "Inspecting"}</p>
 
