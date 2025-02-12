@@ -39,8 +39,7 @@ def register():
 def login():
 	login_details = request.get_json() # store the json body request
 	user_from_db = users_collection.find_one({'username': login_details['username']})  # search for user in database
-
-	if user_from_db:
+	if user_from_db and user_from_db['verified'] == True:
 		encrpted_password = hashlib.sha256(login_details['password'].encode("utf-8")).hexdigest()
 		if encrpted_password == user_from_db['password']:
 			access_token = create_access_token(identity=user_from_db['username']) # create jwt token
@@ -55,7 +54,7 @@ def profile():
 	user_from_db = users_collection.find_one({'username' : current_user})
 	if user_from_db:
 		del user_from_db['_id'], user_from_db['password'] # delete data we don't want to return
-		return jsonify({'profile' : user_from_db }), 200
+		return jsonify({'profile' : user_from_db['username'] }), 200
 	else:
 		return jsonify({'msg': 'Profile not found'}), 404
 

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -23,6 +25,31 @@
     text-decoration: none;
   }
 
+.logout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.logout span {
+  width: 1rem;
+}
+
+.logout button {
+  background: none;
+  border: none;
+  border-radius: 10%;
+}
+
+.logout button:hover {
+  background: rgb(110, 8, 56);
+  cursor: pointer;
+}
+
 #logo {
-    padding-left: 1rem;
+  font-family: bebas neue, sans-serif;;
+  font-size: 2rem;
+  padding-left: 1rem;
+  margin: 0rem;
 }

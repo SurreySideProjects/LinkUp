@@ -13,9 +13,11 @@ const Register = () => {
 
   const [inputValue, setInputValue] = useState({
     username: "",
+    email: "",
     password: "",
+    verified: false
   });
-  const { username, password } = inputValue;
+  const { email, username, password } = inputValue;
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -32,14 +34,6 @@ const Register = () => {
     toast.success(msg, {
       position: "bottom-left",
     });
-
-
-    // const schema = object().shape({
-    //     name: string().required('Name is required'),
-    //     email: string().email().required('Email is required'),
-    //     message: string().required('Message is required')
-    // });
-//   const { register, handleSubmit, formState: { errors } } = useForm({resolver: yupResolver(schema)});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,6 +65,7 @@ const Register = () => {
     setInputValue({
       ...inputValue,
       username: "",
+      email: "",
       password: "",
     });
   };
@@ -81,12 +76,23 @@ const Register = () => {
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
             <div>
-            <label htmlFor="username">Email</label>
+            <label htmlFor="username">Username</label>
             <input
                 type="username"
                 name="username"
                 value={username}
                 placeholder="Enter your username" 
+                onChange={handleOnChange}
+                required
+            />
+            </div>
+            <div>
+            <label htmlFor="email">Email</label>
+            <input
+                type="email"
+                name="email"
+                value={email}
+                placeholder="Enter your email" 
                 onChange={handleOnChange}
                 required
             />
