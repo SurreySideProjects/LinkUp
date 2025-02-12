@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    vertical-align: middle;
     background-color: rgb(190, 13, 96);
     color: white;
     padding: 0.5rem;
@@ -21,6 +22,7 @@
   }
 
 .navbar-center .nav-links a {
+    vertical-align: middle;
     color: #fff;
     text-decoration: none;
   }
@@ -52,4 +54,15 @@
   font-size: 2rem;
   padding-left: 1rem;
   margin: 0rem;
+}
+
+#events-logo, #groups-logo, #random-logo {
+  position: relative;
+    top: 5px;
+    left: -2px;
+}
+
+#logo-link {
+  text-decoration: none;
+  color: white;
 }
