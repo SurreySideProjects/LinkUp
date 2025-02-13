@@ -109,18 +109,18 @@ function Groups() {
             {groupData.description}
             {groupData.numOfMembers}
           </p>
+          <button type='button' >join group</button>
           </>
           : 
           <>
           </>
           }
 
-          {mode==="inspect" && 
+          {/* {mode==="inspect" && 
           <>
           
-          
           </>
-          }
+          } */}
         </div>
       </div>
     </>
