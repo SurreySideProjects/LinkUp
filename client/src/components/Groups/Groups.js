@@ -2,18 +2,17 @@ import React, { useState } from 'react'
 import NavBar from '../NavBar/NavBar'
 import './Groups.css'
 import axios from 'axios'
-import { UNSAFE_createClientRoutesWithHMRRevalidationOptOut } from 'react-router-dom'
 
 function Groups() {
-
-  const [isSearch, setIsSearch] = useState(true)
+  const [mode, setMode] = useState("search") // search OR inspect
   const [inputSearch, setInputSearch] = useState({
     search: ""
   })
-  const search = inputSearch;
-
   const[searchData, setSearchData] = useState()
-  const[groupData, setGroupData] = useState()
+  const[groupData, setGroupData] = useState({
+    "name": "", 
+
+  })
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -23,17 +22,15 @@ function Groups() {
     });
   };
 
-
-
   const handleSubmitSearch = async (e) => {
-    console.log(search)
+    console.log(inputSearch)
     try {
       const response = await axios.get(
         "http://localhost:5000/api/v1/searchGroups", 
         {
           // ...inputSearch // if axios.post
           params: {
-            "search": search.search
+            "search": inputSearch.search
           }
         },
         { withCredentials: true }
@@ -44,20 +41,22 @@ function Groups() {
     }
   };
 
-  const handleSubmitInspect = async (e) => {
-    console.log(search)
+  const handleSubmitInspect = async (groupName) => {
+    console.log("groupName, ", groupName)
+    console.log(inputSearch)
+    groupData.name = groupName
     try {
       const response = await axios.get(
         "http://localhost:5000/api/v1/getGroup", 
         {
           params: {
-            "name": "ZZZZ"
+            "name": groupData.name
           }
         },
         { withCredentials: true }
       );
       setGroupData(response.data)
-      setIsSearch(!isSearch)
+      setMode("inspect")
       console.log(response.data)
     } catch (error) {
       console.log(error);
@@ -65,20 +64,18 @@ function Groups() {
   };
 
 
-
-
   return (
     <>
       <img id='back' src='background.svg'/>
       <NavBar/>
       <div className='container'>
-        <button type='button' onClick={() => setIsSearch((prev) => !prev)}>Inspect</button>
-        <button type='button' onClick={() => setIsSearch((prev) => !prev)}>Search</button>
+        <button type='button' onClick={() => setMode("inspect")}>Inspect</button>
+        <button type='button' onClick={() => setMode("search")}>Search</button>
         
-        <p>{isSearch ? "Searching" : "Inspecting"}</p>
+        <p>{mode==="search" ? "Searching" : "Inspecting"}</p>
 
         <div className='inner'>
-          {isSearch &&
+          {mode==="search" &&
           <>
             <input
             type="search"
@@ -93,18 +90,18 @@ function Groups() {
           </> 
           }
 
-          {isSearch && searchData && searchData.length > 0 ? 
+          {mode==="search" && searchData && searchData.length > 0 ? 
             (searchData.map((group, index) => (
               <div key={index}>
-                <button type='button' onClick={handleSubmitInspect} >{group.name}</button>
+                <button type='button' onClick={() => handleSubmitInspect(group.name)} >{group.name}</button>
               </div>
             )))
-             : isSearch && (
+             : mode==="search" && (
             <p>No groups found.</p>
             )
           }
 
-          { !isSearch && groupData ?
+          {mode==="inspect" && groupData ?
           <>
           <p>
             {groupData.name}
@@ -118,7 +115,7 @@ function Groups() {
           </>
           }
 
-          {!isSearch && 
+          {mode==="inspect" && 
           <>
           
           
