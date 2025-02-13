@@ -1,0 +1,87 @@
+.inspect-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inspect-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .inspect-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .group-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .creator {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  .group-info {
+    padding: 1rem 0;
+  }
+  
+  .info-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+  
+  .description {
+    color: #4b5563;
+    line-height: 1.5;
+  }
+  
+  .inspect-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .member-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+  }
+  
+  .member-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .join-button {
+    padding: 0.5rem 1.5rem;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .join-button:hover {
+    background-color: #2563eb;
+  }
+  
+  .join-button:focus {
+    outline: none;
+    ring: 2px solid #93c5fd;
+  }

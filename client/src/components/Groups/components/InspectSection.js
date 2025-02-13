@@ -1,20 +1,45 @@
-import React, { useState } from 'react'
-// import './Groups.css'
+import React from 'react';
+import './InspectSection.css';
 
-
-function InspectSection({groupData}) {
-
+function InspectSection({ groupData }) {
   return (
-    <>
-        <p>
-            {groupData.name}
-            {groupData.creator}
-            {groupData.description}
-            {groupData.numOfMembers}
-        </p>
-        <button type='button' >join group</button>
-    </>
-  )
+    <div className="inspect-card">
+      <div className="inspect-content">
+        <div className="inspect-header">
+          <h2 className="group-name">{groupData.name}</h2>
+          <p className="creator">Created by: {groupData.creator}</p>
+        </div>
+
+        <div className="group-info">
+          <h3 className="info-title">About this group</h3>
+          <p className="description">{groupData.description}</p>
+        </div>
+
+        <div className="inspect-footer">
+          <div className="member-count">
+            <svg 
+              className="member-icon"
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth="2" 
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <span>{groupData.numOfMembers} members</span>
+          </div>
+          
+          <button type="button" className="join-button">
+            Join Group
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default InspectSection
+export default InspectSection;
