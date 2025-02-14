@@ -101,7 +101,6 @@ def createGroupUser():
 		new_groupUser["role"] = "member"
 	
 	result = groupUsers_collection.find_one({"groupID": new_groupUser["groupID"], "userID": new_groupUser["userID"]})
-	print(not result)
 	if not result and (new_groupUser["groupID"] or new_groupUser["userID"]): # if there isnt a groupUser with identical ID's, and ID's actually exist
 		del new_groupUser["groupname"], new_groupUser["username"]
 		groupUsers_collection.insert_one(new_groupUser)

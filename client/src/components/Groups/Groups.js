@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import NavBar from '../NavBar/NavBar'
 import './Groups.css'
 import axios from 'axios'
-import SearchSection from './components/SearchSection'
-import InspectSection from './components/InspectSection'
+import SearchSection from './components/SearchSection/SearchSection'
+import InspectSection from './components/InspectSection/InspectSection'
 
 function Groups() {
   const [mode, setMode] = useState("search") // search OR inspect
@@ -39,10 +39,15 @@ function Groups() {
       <img id='back' src='background.svg'/>
       <NavBar/>
       <div className='container'>
-        <button type='button' onClick={() => setMode("inspect")}>Inspect</button>
-        <button type='button' onClick={() => setMode("search")}>Search</button>
-        
-        <p>{mode==="search" ? "Searching" : "Inspecting"}</p>
+
+        {mode === "inspect" && 
+        // <button type='button' onClick={() => setMode("inspect")}>Inspect</button>}
+        <button 
+        type='button' 
+        onClick={() => setMode("search")}
+        className="search-button">
+        Search
+        </button>}
 
         <div className='inner'>
           {mode === "search" ? 
