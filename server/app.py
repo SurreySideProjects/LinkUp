@@ -61,14 +61,10 @@ def profile():
 
 
 
-
-
-
-
-
+##### GROUP
 @app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
 # @jwt_required()
-def createGroup():
+def create_group():
 	new_group = request.get_json()
 	doc = groups_collection.find_one({"name": new_group["name"]}) # check if group exist
 	creater = users_collection.find_one({'username' : new_group["username"]})
@@ -85,13 +81,13 @@ def createGroup():
 			"role": "admin",
 		}
 		groupUsers_collection.insert_one(new_groupUser)
-		return jsonify({'msg': 'Group was created successfully'}), 201
+		return jsonify({'msg': 'Group was created successfully'}), 200
 	else:
 		return jsonify({'msg': 'Group name already exists'}), 409
 
 @app.route("/api/v1/addUserToGroup", methods=["POST"])
 @jwt_required(optional=True)
-def createGroupUser():
+def create_group_user():
 	new_groupUser = request.get_json()
 
 	new_groupUser["groupID"] = groups_collection.find_one({"name": new_groupUser["groupname"]})["_id"]  # this must change if groupname is not unique!!
@@ -110,7 +106,7 @@ def createGroupUser():
 			{"$inc": {"numOfMembers": 1}}
 		)
 
-		return jsonify({'msg': 'User was successfully added to the Group'}), 201
+		return jsonify({'msg': 'User was successfully added to the Group'}), 200
 	else: 
 		return jsonify({'msg': 'Error while adding user to group. User was not added.'}), 409
 
@@ -129,6 +125,7 @@ def get_group():
 	name = request.args.get("name")
 	group = groups_collection.find_one({"name": name})
 	if group:
+		print(group["userID"])
 		group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
 		del group["_id"], group["userID"]
 		return jsonify(group), 200
@@ -152,6 +149,26 @@ def search_groups():
 		return jsonify(output), 200
 	return jsonify({'msg': 'No groups exist.'}), 409
 
+@app.route("/api/v1/getGroupByUser")
+def get_users_groups(): # This feels like a very unsafe function...
+	userID = request.args.get("userID") # must include either "userID" or "username"
+	if not userID:
+		username = request.args.get("username")
+		print(username)
+		userID = users_collection.find_one({"username": username})["_id"]
+
+	output = []
+	groupUsers = groupUsers_collection.find({"userID": userID})
+
+	# groups = list(groups_collection.find({"_id": {"$in": [groupUser["groupID"] for groupUser in groupUsers]}})) cant use this cos i hvae to iterate and convert objects to strings anyway
+	for groupUser in groupUsers:
+		group = groups_collection.find_one({"_id": groupUser["groupID"]})
+		del group["_id"], group["userID"]
+		output.append(group)
+	if output: 
+		return jsonify(output), 200
+	return jsonify({'msg': 'No groups exist.'}), 409
+	# for groupID in groupIDs:
 
 
 if __name__ == '__main__':
