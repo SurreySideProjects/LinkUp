@@ -7,7 +7,7 @@ import InspectSection from './components/InspectSection/InspectSection'
 
 function Groups() {
   const [mode, setMode] = useState("search") // search OR inspect
-  const[searchData, setSearchData] = useState()
+  const [userMode, setUserMode] = useState("list")
   const[groupData, setGroupData] = useState({
     "name": "", 
   })
@@ -38,14 +38,14 @@ function Groups() {
     <>
       <img id='back' src='background.svg'/>
       <NavBar/>
-      <div className='container'>
+      <div className='left-container'>
 
         {mode === "inspect" && 
-        // <button type='button' onClick={() => setMode("inspect")}>Inspect</button>}
         <button 
         type='button' 
         onClick={() => setMode("search")}
-        className="search-button">
+        className="search-button"
+        >
         Search
         </button>}
 
@@ -56,7 +56,18 @@ function Groups() {
             (<InspectSection  groupData={groupData}  />)
           }
         </div>
+      </div>
 
+      <div className='right-container'>
+        <h1>MY GROUPS</h1>   
+        {userMode === "list" && 
+        <button 
+        type='button' 
+        onClick={() => setMode("search")}
+        className="search-button"
+        >
+        Search
+        </button>}
       </div>
     </>
   )
