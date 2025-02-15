@@ -4,10 +4,12 @@ import './Groups.css'
 import axios from 'axios'
 import SearchSection from './components/SearchSection/SearchSection'
 import InspectSection from './components/InspectSection/InspectSection'
+import ListSection from './components/ListSection/ListSection'
+import GraphSection from './components/GraphSection/GraphSection'
 
 function Groups() {
   const [mode, setMode] = useState("search") // search OR inspect
-  const [userMode, setUserMode] = useState("list")
+  const [userMode, setUserMode] = useState("list") // list OR graph
   const[groupData, setGroupData] = useState({
     "name": "", 
   })
@@ -60,14 +62,31 @@ function Groups() {
 
       <div className='right-container'>
         <h1>MY GROUPS</h1>   
-        {userMode === "list" && 
+        {userMode === "list" ? 
         <button 
         type='button' 
-        onClick={() => setMode("search")}
+        onClick={() => setUserMode("graph")}
         className="search-button"
         >
-        Search
-        </button>}
+        View Graph
+        </button>
+        :
+        <button 
+        type='button' 
+        onClick={() => setUserMode("list")}
+        className="search-button"
+        >
+        View List
+        </button>
+        }
+
+        <div className='inner'>
+          {userMode === "list" ? 
+            (<ListSection   /> )
+            :
+            (<GraphSection />)
+          }
+        </div>
       </div>
     </>
   )
