@@ -41,7 +41,7 @@ function Groups() {
       <img id='back' src='background.svg'/>
       <NavBar/>
       <div className='left-container'>
-
+        <h1>SEARCH OR INSPECT</h1> 
         {mode === "inspect" && 
         <button 
         type='button' 

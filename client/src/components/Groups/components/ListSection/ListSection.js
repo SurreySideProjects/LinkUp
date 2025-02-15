@@ -3,7 +3,7 @@ import "./ListSection.css";
 import axios from "axios";
 import { FaGrimace } from "react-icons/fa";
 
-const getUsersGroups = async(username) => {
+const getUsersGroups = async(username) => { // this can also be placed inside main function
     try {
         const response = await axios.get("http://localhost:5000/api/v1/getGroupByUser", 
             {params : {"username": username}}
@@ -14,9 +14,8 @@ const getUsersGroups = async(username) => {
     }
     catch (error) { 
         console.log(error);
-        return;
+        return [];
     }
-
 }
 
 function ListSection(){ 
@@ -24,22 +23,7 @@ function ListSection(){
     const [groupsData, setGroupsData] = useState([])
 
 
-    // const handleShowGroups = async (e) =>{
-    //     try {
-    //         const response = await axios.get("http://localhost:5000/api/v1/getGroupByUser", 
-    //             {params : {"username": username}}
-    //         )
-    //         setGroupData(response.data)
-    //         console.log(response.data);
-    //         return response.data;
-    //     }
-    //     catch (error) { 
-    //         console.log(error);
-    //         return;
-    //     }
-    // }
-
-    const handleShowGroups = async(e) =>{
+    const handleRefreshGroups = async(e) =>{ // refresh button 
         const groups = await getUsersGroups(username); 
         setGroupsData(groups);
         console.log(groups);
@@ -58,7 +42,7 @@ function ListSection(){
      
 
     return (
-        <div className="search-container">
+        <div>
           {/* <div className="search-bar">
             <button type="submit" onClick={handleShowGroups} className="search-button">
               Search
@@ -83,7 +67,7 @@ function ListSection(){
                 ))}
               </div>
             ) : (
-              <p className="no-results">No groups found.</p>
+              <p className="no-results">Loading...</p>
             )}
           </div>
         </div>
