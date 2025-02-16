@@ -163,6 +163,7 @@ def get_users_groups(): # This feels like a very unsafe function...
 	# groups = list(groups_collection.find({"_id": {"$in": [groupUser["groupID"] for groupUser in groupUsers]}})) cant use this cos i hvae to iterate and convert objects to strings anyway
 	for groupUser in groupUsers:
 		group = groups_collection.find_one({"_id": groupUser["groupID"]})
+		group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
 		del group["_id"], group["userID"]
 		output.append(group)
 	if output: 
