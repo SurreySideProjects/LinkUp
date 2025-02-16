@@ -18,7 +18,7 @@ const getUsersGroups = async(username) => { // this can also be placed inside ma
     }
 }
 
-function ListSection(){ 
+function ListSection({setMode, setGroupData}){ 
     const username = "testuser";
     const [groupsData, setGroupsData] = useState([])
 
@@ -42,13 +42,6 @@ function ListSection(){
      
 
     return (
-        <div>
-          {/* <div className="search-bar">
-            <button type="submit" onClick={handleShowGroups} className="search-button">
-              Search
-            </button>
-          </div>
-     */}
           <div className="results-container">
             {groupsData && groupsData.length > 0 ? (
               <div className="results-grid">
@@ -56,7 +49,7 @@ function ListSection(){
                   <button
                     key={index}
                     type="button"
-                    // onClick={() => handleGroupButton(group.name)}
+                    onClick={() => [setMode("inspect"), setGroupData(group)]}
                     className="group-button"
                   >
                     <span className="group-name">{group.name}</span>
@@ -70,7 +63,6 @@ function ListSection(){
               <p className="no-results">Loading...</p>
             )}
           </div>
-        </div>
       );
 
 }

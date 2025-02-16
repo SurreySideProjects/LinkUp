@@ -39,7 +39,7 @@ function Groups() {
   return (
     <>
       <img id='back' src='background.svg'/>
-      <NavBar/>
+      <NavBar username="testuser (manually put in)"/>
       <div className='left-container'>
         <h1>SEARCH OR INSPECT</h1> 
         {mode === "inspect" && 
@@ -82,9 +82,9 @@ function Groups() {
 
         <div className='inner'>
           {userMode === "list" ? 
-            (<ListSection   /> )
+            (<ListSection  setMode={setMode} setGroupData={setGroupData} /> )
             :
-            (<GraphSection />)
+            (<GraphSection setMode={setMode} setGroupData={setGroupData} />)
           }
         </div>
       </div>
