@@ -29,6 +29,7 @@ def register():
 	new_user = request.get_json() # store the json body request
 	new_user["password"] = hashlib.sha256(new_user["password"].encode("utf-8")).hexdigest() # encrpt password
 	doc = users_collection.find_one({"username": new_user["username"]}) # check if user exist
+	print(new_user)
 	if not doc:
 		users_collection.insert_one(new_user)
 		return jsonify({'msg': 'User created successfully'}), 201
@@ -125,7 +126,6 @@ def get_group():
 	name = request.args.get("name")
 	group = groups_collection.find_one({"name": name})
 	if group:
-		print(group["userID"])
 		group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
 		del group["_id"], group["userID"]
 		return jsonify(group), 200
@@ -171,6 +171,32 @@ def get_users_groups(): # This feels like a very unsafe function...
 	return jsonify({'msg': 'No groups exist.'}), 409
 	# for groupID in groupIDs:
 
+@app.route("/api/v1/isUserInGroup")
+def is_user_in_group():
+	userID = request.args.get("userID") # must include either "userID" or "username"
+	groupID = request.args.get("groupID")
+	if not userID:
+		username = request.args.get("username")
+		userID = users_collection.find_one({"username": username})["_id"]
+
+	if not groupID:
+		groupname = request.args.get("groupname")
+		groupID = groups_collection.find_one({"name": groupname})["_id"]
+
+	groupUsers = groupUsers_collection.find_one({"userID": userID, "groupID": groupID})
+	if groupUsers: 
+		return jsonify({"joined": True}), 200
+	return jsonify({'joined': False}), 200
+
+	# groups = list(groups_collection.find({"_id": {"$in": [groupUser["groupID"] for groupUser in groupUsers]}})) cant use this cos i hvae to iterate and convert objects to strings anyway
+	# for groupUser in groupUsers:
+	# 	group = groups_collection.find_one({"_id": groupUser["groupID"]})
+	# 	group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+	# 	del group["_id"], group["userID"]
+	# 	output.append(group)
+	# if output: 
+	# 	return jsonify(output), 200
+	# return jsonify({'msg': 'No groups exist.'}), 409
 
 if __name__ == '__main__':
 	app.run(debug=True)
