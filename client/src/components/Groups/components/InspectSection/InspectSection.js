@@ -1,7 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './InspectSection.css';
+import axios from 'axios';
+
+const isUserInGroup = async(username, groupname) =>{
+  try{
+    const response = await axios.get("http://localhost:5000/api/v1/isUserInGroup",
+       {params: { 
+        "groupname": groupname, 
+        "username": username
+      }}, 
+      {withCredentials: true}
+    );
+    console.log(response.data.joined)
+    return response.data.joined;
+
+  } catch (error) {
+    return false;
+  }
+}
 
 function InspectSection({ groupData }) {
+  const username = "youssef";
+
+
+  const [isJoined, setIsJoined] = useState()
+
+
+  const handleJoinGroup = async() => {
+    try{
+      const response = await axios.post("http://localhost:5000/api/v1/addUserToGroup",
+        {
+          groupname: groupData.name, 
+          username: username
+        }, 
+        {withCredentials: true}
+      );
+      console.log(response)
+      setIsJoined(true)
+    } catch (error) {
+      console.log(error)
+      setIsJoined(false)
+    }
+  }
+
+  useEffect(() => {
+    const fetchIsJoined = async () => {
+      const result = await isUserInGroup(username, groupData.name);
+      setIsJoined(result);
+    };
+
+    fetchIsJoined();
+  }, [groupData.name, username])
+
+
   return (
     <div className="inspect-card">
       <div className="inspect-content">
@@ -33,9 +84,15 @@ function InspectSection({ groupData }) {
             <span>{groupData.numOfMembers} members</span>
           </div>
           
-          <button type="button" className="join-button">
-            Join Group
-          </button>
+          {!isJoined ?
+            (<button type="button" className="join-button" onClick={() => handleJoinGroup()}>
+              Join Group
+            </button>)
+          :
+            (<button type="button" className="join-button" onClick={() => handleJoinGroup()}>
+              Leave Group
+            </button>)
+          }
         </div>
       </div>
     </div>
