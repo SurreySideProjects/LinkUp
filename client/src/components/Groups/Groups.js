@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavBar from '../NavBar/NavBar'
 import './Groups.css'
 import axios from 'axios'
@@ -6,6 +6,8 @@ import SearchSection from './components/SearchSection/SearchSection'
 import InspectSection from './components/InspectSection/InspectSection'
 import ListSection from './components/ListSection/ListSection'
 import GraphSection from './components/GraphSection/GraphSection'
+import { useCookies } from 'react-cookie'
+import { useNavigate } from "react-router-dom";
 
 function Groups() {
   const [mode, setMode] = useState("search") // search OR inspect
@@ -13,6 +15,8 @@ function Groups() {
   const[groupData, setGroupData] = useState({
     "name": "", 
   })
+  const [cookies, removeCookie] = useCookies();
+  // const [username, setUsername] = useState();
 
   const handleSubmitInspect = async (groupName) => {
     console.log("groupName, ", groupName)
@@ -35,11 +39,10 @@ function Groups() {
     }
   };
 
-
   return (
     <>
       <img id='back' src='background.svg'/>
-      <NavBar username="testuser (manually put in)"/>
+      <NavBar username= {cookies.user}/>
       <div className='left-container'>
         <h1>SEARCH OR INSPECT</h1> 
         {mode === "inspect" && 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ListSection.css";
 import axios from "axios";
 import { FaGrimace } from "react-icons/fa";
+import { useCookies } from "react-cookie";
 
 const getUsersGroups = async(username) => { // this can also be placed inside main function
     try {
@@ -19,12 +20,13 @@ const getUsersGroups = async(username) => { // this can also be placed inside ma
 }
 
 function ListSection({setMode, setGroupData}){ 
-    const username = "testuser";
+    const [cookies, removeCookie] = useCookies();
     const [groupsData, setGroupsData] = useState([])
 
 
+
     const handleRefreshGroups = async(e) =>{ // refresh button 
-        const groups = await getUsersGroups(username); 
+        const groups = await getUsersGroups(cookies.user); 
         setGroupsData(groups);
         console.log(groups);
     }
@@ -34,7 +36,7 @@ function ListSection({setMode, setGroupData}){
     // const [groupsData, setGroupData] = useState(getUsersGroups(username))
     // const groupsData = getUsersGroups(username)
     useEffect(() => { const fetchGroups = async() => {
-        const groups = await getUsersGroups(username) 
+        const groups = await getUsersGroups(cookies.user) 
         setGroupsData(groups)
         }
         fetchGroups()

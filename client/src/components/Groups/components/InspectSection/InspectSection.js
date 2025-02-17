@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './InspectSection.css';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 const isUserInGroup = async(username, groupname) =>{
   try{
@@ -20,9 +21,7 @@ const isUserInGroup = async(username, groupname) =>{
 }
 
 function InspectSection({ groupData }) {
-  const username = "youssef";
-
-
+  const [cookies, setCookie] = useCookies();
   const [isJoined, setIsJoined] = useState()
 
 
@@ -31,7 +30,7 @@ function InspectSection({ groupData }) {
       const response = await axios.post("http://localhost:5000/api/v1/addUserToGroup",
         {
           groupname: groupData.name, 
-          username: username
+          username: cookies.user
         }, 
         {withCredentials: true}
       );
@@ -45,12 +44,12 @@ function InspectSection({ groupData }) {
 
   useEffect(() => {
     const fetchIsJoined = async () => {
-      const result = await isUserInGroup(username, groupData.name);
+      const result = await isUserInGroup(cookies.user, groupData.name);
       setIsJoined(result);
     };
 
     fetchIsJoined();
-  }, [groupData.name, username])
+  }, [groupData.name, cookies.user])
 
 
   return (
