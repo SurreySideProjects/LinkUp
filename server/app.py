@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 from pymongo import MongoClient
+from bson.json_util import dumps
 import os
 from dotenv import load_dotenv
 
@@ -23,7 +24,9 @@ db = client["PartyVerse"]
 users_collection = db["users"]
 groups_collection = db["groups"]
 groupUsers_collection = db["groupUsers"]
+events_collection = db["events"]
 
+#-----------------USERS SECTION------------
 @app.route("/api/v1/users", methods=["POST"])
 def register():
 	new_user = request.get_json() # store the json body request
@@ -58,7 +61,7 @@ def profile():
 	else:
 		return jsonify({'msg': 'Profile not found'}), 404
 
-
+#-----------------GROUPS SECTION------------
 @app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
 @jwt_required()
 def createGroup():
@@ -117,6 +120,39 @@ def get_groups():
 			del group["_id"], group["userID"]
 		return jsonify(groups), 200
 	return jsonify({'msg': 'No groups exist.'}), 409
+
+
+#-----------------EVENTS SECTION------------
+@app.route("/api/v1/createEvent", methods=["POST"])
+@jwt_required()
+def create_event():
+	username = get_jwt_identity()
+	if not username:
+		return jsonify({'msg': 'You are not a valid user'}), 401
+	new_event = request.get_json()
+	highest_id = events_collection.find_one({"$query":{},"$orderby":{"id":-1}})
+	id = highest_id + 1 if highest_id else 1
+
+	event = {
+		"id" : id,
+		"owner" : username,
+		"location" : new_event["location"],
+		"date" : new_event["date"],
+		"participants" : [],
+		"description" : new_event["description"],
+		"private" : new_event["private"]
+	}
+
+	events_collection.insert_one(event)
+	return jsonify({'msg': 'Event created.'}), 200
+	
+@app.route("/api/v1/getEvents", methods=["get"])
+def get_events():
+	data = events_collection.find({}, { "_id": 0 })
+	if data:
+		return jsonify(dumps(data)), 200
+	return jsonify({'msg' : 'There are no events!'})
+	
 
 
 
