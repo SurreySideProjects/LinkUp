@@ -24,10 +24,9 @@ function ChatSection({ groupData }){
         )
     }, [groupData, cookies.user])
 
-    socket.on("message",(message) => {
-        console.log(message)
-        if (typeof message === "object"){
-            setMessages(messages.concat([message]))
+    socket.on("message",(data) => {
+        if (typeof data === "object"){
+            setMessages([...messages, data])
         }
     })
 
@@ -36,14 +35,21 @@ function ChatSection({ groupData }){
             <div className="chat-container">
                 <ul className="chat-messages">
                 {messages.map((item, index) => (
-                    <li key={index}>{item.username+ ": "+ item.message}</li>
+                    <li className={item.username === cookies.user ? "my-message": "other-message"}>{item.username+ ": "+ item.message}</li>
                 ))}
                 </ul>
             </div>
-            <input
-            onChange={(e) => setMessage(e.target.value)}
-            />
-            <button type="submit" onClick={() => sendMessage()}>submit</button>
+            <div className="search-bar">
+            <div className="search-input-wrapper">
+                <input
+                onChange={(e) => setMessage(e.target.value)}
+                className="search-input"
+                placeholder="Type a message"
+                />
+            </div>     
+            <button type="submit" onClick={() => sendMessage()} className="search-button">
+            send</button>  
+            </div>
           </div>
       );
 }
