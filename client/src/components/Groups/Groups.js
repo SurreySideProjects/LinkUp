@@ -8,10 +8,11 @@ import ListSection from './components/ListSection/ListSection'
 import GraphSection from './components/GraphSection/GraphSection'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from "react-router-dom";
+import ChatSection from './components/ChatSection/ChatSection'
 
 function Groups() {
   const [mode, setMode] = useState("search") // search OR inspect
-  const [userMode, setUserMode] = useState("list") // list OR graph
+  const [userMode, setUserMode] = useState("list") // list OR graph OR messages
   const[groupData, setGroupData] = useState({
     "name": "", 
   })
@@ -58,7 +59,7 @@ function Groups() {
           {mode === "search" ? 
             (<SearchSection  handleGroupButton={handleSubmitInspect}   /> )
             :
-            (<InspectSection  groupData={groupData}  />)
+            (<InspectSection  groupData={groupData}  setUserMode={setUserMode} />)
           }
         </div>
       </div>
@@ -73,7 +74,7 @@ function Groups() {
         >
         View Graph
         </button>
-        :
+        : // userMode === "graph" ? 
         <button 
         type='button' 
         onClick={() => setUserMode("list")}
@@ -86,8 +87,10 @@ function Groups() {
         <div className='inner'>
           {userMode === "list" ? 
             (<ListSection  setMode={setMode} setGroupData={setGroupData} /> )
-            :
+            : userMode === "graph" ?
             (<GraphSection setMode={setMode} setGroupData={setGroupData} />)
+            : 
+            (<ChatSection groupData={groupData}/>)
           }
         </div>
       </div>

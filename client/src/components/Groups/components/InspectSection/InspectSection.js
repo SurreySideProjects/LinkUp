@@ -20,7 +20,7 @@ const isUserInGroup = async(username, groupname) =>{
   }
 }
 
-function InspectSection({ groupData }) {
+function InspectSection({ groupData, setUserMode }) {
   const [cookies, setCookie] = useCookies();
   const [isJoined, setIsJoined] = useState()
 
@@ -88,9 +88,17 @@ function InspectSection({ groupData }) {
               Join Group
             </button>)
           :
-            (<button type="button" className="join-button" onClick={() => handleJoinGroup()}>
+            (
+            <>
+            <button type="button" className="join-button" onClick={() => handleJoinGroup()}>
               Leave Group
-            </button>)
+            </button>
+
+            <button type="button" className="join-button" onClick={() => setUserMode("messages")}>
+              Chat
+            </button>
+            </>
+            )
           }
         </div>
       </div>
