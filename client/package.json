@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-alpha.6",
     "@hookform/resolvers": "^3.10.0",
     "@react-native-community/geolocation": "^3.4.0",
     "axios": "^1.7.9",

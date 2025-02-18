@@ -5,3 +5,179 @@
     color: white;
     background: rgba(0,0,0,0);
 }
+
+/* Create Event Button */
+.create-btn {
+    padding: 0.75rem 2rem;
+    margin: 2rem auto;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #4A90E2;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-btn:hover {
+    background-color: #357ABD;
+  }
+  
+  /* Event Cards Grid */
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 2rem auto;
+  }
+  
+  /* Event Card */
+  .event-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    transition: transform 0.2s;
+    border: 1px solid #eaeaea;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Event Card Content */
+  .event-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .event-location, .event-date, .event-participants {
+    font-size: 0.95rem;
+    margin: 0.25rem 0;
+    color: #555;
+  }
+  
+  /* No Events Placeholder */
+  .no-events {
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    padding: 2rem;
+  }
+
+.popup {
+    position: fixed;
+    inset: 0;
+    padding-bottom: 3rem;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    width: 400px; /* Set a fixed width for the form */
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.popup-form h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.popup-form input, 
+.popup-form select, 
+.popup-form textarea {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.popup-form textarea {
+    resize: vertical;
+    min-height: 120px; /* Set a minimum height for the textarea */
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.popup-form input:focus,
+.popup-form textarea:focus,
+.popup-form select:focus {
+    outline: none;
+    box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.2);
+}
+
+.popup-form button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(190, 13, 96);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-form button:hover {
+    background-color: #45a049;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: black;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

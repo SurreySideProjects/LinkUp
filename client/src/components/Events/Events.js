@@ -1,27 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '../NavBar/NavBar';
 import './Events.css';
+import { IoMdClose } from "react-icons/io";
+import { useCookies } from 'react-cookie';
 
 
 function Events() {
   const [eventData, setEventData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [cookies, setCookies] = useCookies([]); 
+  const [formData, setFormData] = useState({
+    location: '',
+    date: '',
+    description: '',
+    private: 'false'
+  });
 
-  const getEvents  = async () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
-      const url = 'http://localhost:5000/api/v1/getEvents';
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/api/v1/createEvent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${cookies.token}`
+        },
+        body: JSON.stringify(formData)
+      });
+      if (response.ok) {
+        alert('Event created successfully!');
+        setShowPopup(false);
+        setFormData({ location: '', date: '', description: '', isPrivate: 'false' });
+      } else {
+        alert('Failed to create event');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while creating the event');
+    }
+  };
 
-      const response = await fetch (url);
-              try {
-                  const responseJson = await response.json();
-                  console.log(responseJson);
-                  setEventData(responseJson.results);
-              } catch (err) {
-                  console.error(err);
-              }
-  }
+  const getEvents = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/v1/getEvents');
+      const result = await response.json();
+      console.log(result.results)
+      setEventData(result.results); 
+    } catch (error) {
+      console.error('Failed to fetch events:', error);
+    }
+  };
 
   useEffect (()=> {
-    /*getEvents();*/
+    getEvents();
   }, []);
 
   return (
@@ -29,12 +68,72 @@ function Events() {
       <img id='back' src='background.svg'/>
       <NavBar/>
       <div className='events'>
-        <button>Create Event</button>
-        <div className='allEvents'>
-          <div className='event'>
-            ADD INFO HERE
+        <button onClick={() => setShowPopup(true)}>Create Event</button>
+
+      {/* Event Cards */}
+      <div className='events-grid'>
+        { console.log(eventData) && eventData?.length > 0 ? (
+          eventData.map((event, index) => (
+            <div className='event-card' key={index}>
+              <h3 className='event-name'>{event.owner}</h3>
+              <p className='event-location'>📍 {event.location}</p>
+              <p className='event-date'>📅 {event.date}</p>
+              <p className='event-participants'>👥 {event.participants.length} Participants</p>
+            </div>
+          ))
+        ) : (
+          <p className='no-events'>No events available</p>
+        )}
+      </div>
+        {/* POPUP SECTION */}
+        {showPopup && (
+        <div className='popup'>
+          <IoMdClose 
+            size={50} 
+            className='close' 
+            onClick={() => setShowPopup(false)} 
+          />
+          <div className='popup-form'>  
+            <h1>Add an event!</h1>
+            <form onSubmit={handleSubmit}>
+              <input 
+                type='text' 
+                name='location' 
+                placeholder='Location' 
+                value={formData.location} 
+                onChange={handleChange} 
+                required 
+              />
+              <input 
+                type='date' 
+                name='date' 
+                value={formData.date} 
+                onChange={handleChange} 
+                required 
+              />
+              <textarea 
+                name='description' 
+                placeholder='Description' 
+                rows="5" 
+                value={formData.description} 
+                onChange={handleChange} 
+                required 
+              />
+              <p>Private party?</p>
+              <select 
+                name='private' 
+                value={formData.private} 
+                onChange={handleChange}
+              >
+                <option value="false">Public</option>
+                <option value="true">Private</option>
+              </select>
+              <button type='submit'>Submit</button>
+            </form>
           </div>
         </div>
+      )}
+      {/* END OF POPUP SECTION */}
       </div>
     </>
   )
