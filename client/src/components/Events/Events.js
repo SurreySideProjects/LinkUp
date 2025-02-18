@@ -10,6 +10,7 @@ function Events() {
   const [showPopup, setShowPopup] = useState(false);
   const [cookies, setCookies] = useCookies([]); 
   const [formData, setFormData] = useState({
+    name: '',
     location: '',
     date: '',
     description: '',
@@ -38,7 +39,7 @@ function Events() {
       if (response.ok) {
         alert('Event created successfully!');
         setShowPopup(false);
-        setFormData({ location: '', date: '', description: '', isPrivate: 'false' });
+        setFormData({ name: '', location: '', date: '', description: '', private: 'false' });
       } else {
         alert('Failed to create event');
       }
@@ -52,8 +53,8 @@ function Events() {
     try {
       const response = await fetch('http://localhost:5000/api/v1/getEvents');
       const result = await response.json();
-      console.log(result.results)
-      setEventData(result.results); 
+      
+      setEventData(JSON.parse(result)); 
     } catch (error) {
       console.error('Failed to fetch events:', error);
     }
@@ -68,14 +69,15 @@ function Events() {
       <img id='back' src='background.svg'/>
       <NavBar/>
       <div className='events'>
-        <button onClick={() => setShowPopup(true)}>Create Event</button>
+        <button className='create-btn' onClick={() => setShowPopup(true)}>Create Event</button>
 
       {/* Event Cards */}
+      <div className='events-container'>
       <div className='events-grid'>
-        { console.log(eventData) && eventData?.length > 0 ? (
+        { console.log(typeof(eventData), eventData) || eventData.length > 0 ? (
           eventData.map((event, index) => (
             <div className='event-card' key={index}>
-              <h3 className='event-name'>{event.owner}</h3>
+              <h3 className='event-name'>{event.name}</h3>
               <p className='event-location'>📍 {event.location}</p>
               <p className='event-date'>📅 {event.date}</p>
               <p className='event-participants'>👥 {event.participants.length} Participants</p>
@@ -84,6 +86,7 @@ function Events() {
         ) : (
           <p className='no-events'>No events available</p>
         )}
+      </div>
       </div>
         {/* POPUP SECTION */}
         {showPopup && (
@@ -96,6 +99,14 @@ function Events() {
           <div className='popup-form'>  
             <h1>Add an event!</h1>
             <form onSubmit={handleSubmit}>
+              <input 
+                type='text' 
+                name='name' 
+                placeholder='Name of the event' 
+                value={formData.name} 
+                onChange={handleChange} 
+                required 
+              />
               <input 
                 type='text' 
                 name='location' 

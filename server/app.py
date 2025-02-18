@@ -131,11 +131,12 @@ def create_event():
 		return jsonify({'msg': 'You are not a valid user'}), 401
 	new_event = request.get_json()
 	highest_id = events_collection.find_one({"$query":{},"$orderby":{"id":-1}})
-	id = highest_id + 1 if highest_id else 1
+	id = highest_id["id"] + 1 if highest_id else 1
 
 	event = {
-		"id" : id,
+		"id" : "{}".format(id),
 		"owner" : username,
+		"name" : new_event["name"],
 		"location" : new_event["location"],
 		"date" : new_event["date"],
 		"participants" : [],

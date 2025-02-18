@@ -8,60 +8,92 @@
 
 /* Create Event Button */
 .create-btn {
-    padding: 0.75rem 2rem;
-    margin: 2rem auto;
+    position: absolute;
+    top: 5rem;
+    right: 2rem;
+    padding: 0.75rem 1.5rem;
     font-size: 1rem;
-    color: #fff;
-    background-color: #4A90E2;
+    font-weight: bold;
+    color: white;
     border: none;
-    border-radius: 24px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ff2592e7, #fe00e9);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    transition: background-color 0.3s;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Hover effect */
+.create-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+}
   
-  .create-btn:hover {
-    background-color: #357ABD;
-  }
-  
-  /* Event Cards Grid */
-  .events-grid {
+/* Event Cards Grid */
+.events-grid {
+    position: absolute;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns per row */
+    gap: 2rem; /* Space between cards */
     padding: 2rem;
-    max-width: 1000px;
-    margin: 2rem auto;
-  }
-  
-  /* Event Card */
-  .event-card {
-    background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-    transition: transform 0.2s;
-    border: 1px solid #eaeaea;
-  }
-  
-  .event-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Event Card Content */
-  .event-name {
-    font-size: 1.4rem;
+    max-width: 1000px; 
+    margin: 0 auto; /* Center grid */
+    justify-items: center; /* Center items horizontally */
+}
+
+/* Event Card */
+.event-card {
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+    color: white;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    width: 400px; /* Fixed width for consistency */
+    min-height: 220px; 
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+}
+
+/* Event Card Content Styling */
+.event-name {
+    font-size: 2rem; /* Larger title */
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #2c3e50;
-  }
-  
-  .event-location, .event-date, .event-participants {
-    font-size: 0.95rem;
-    margin: 0.25rem 0;
-    color: #555;
-  }
+}
+
+.event-location, .event-date, .event-participants {
+    font-size: 1.25rem; /* Larger text for details */
+    margin-top: 0.5rem;
+}
+
+/* Different Gradient Colors for Cards */
+.event-card:nth-child(1) {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+.event-card:nth-child(2) {
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+}
+.event-card:nth-child(3) {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+.event-card:nth-child(4) {
+    background: linear-gradient(135deg, #84fab0, #8fd3f4);
+}
+.event-card:nth-child(5) {
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+}
+
+/* Centering the Event Cards */
+.events-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
   
   /* No Events Placeholder */
   .no-events {
