@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from flask_socketio import SocketIO, emit, join_room, send, leave_room
 
 load_dotenv()
 MONGO_URL = os.getenv('MONGO_URL')
@@ -17,12 +18,18 @@ jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=7) #Token expires in 7 days
 
-#Connection
+#WebSockets
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+#DB Connection
 client = MongoClient(MONGO_URL)
 db = client["PartyVerse"]
 users_collection = db["users"]
 groups_collection = db["groups"]
 groupUsers_collection = db["groupUsers"]
+groupMessages_collection = db["groupMessages"]
+
+
 
 @app.route("/api/v1/users", methods=["POST"])
 def register():
@@ -62,7 +69,7 @@ def profile():
 
 
 
-##### GROUP
+##### GROUP and GROUPUSER
 @app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
 # @jwt_required()
 def create_group():
@@ -149,7 +156,7 @@ def search_groups():
 		return jsonify(output), 200
 	return jsonify({'msg': 'No groups exist.'}), 409
 
-@app.route("/api/v1/getGroupByUser")
+@app.route("/api/v1/getGroupByUser", methods=["GET"])
 def get_users_groups(): # This feels like a very unsafe function...
 	userID = request.args.get("userID") # must include either "userID" or "username"
 	if not userID:
@@ -198,5 +205,41 @@ def is_user_in_group():
 	# 	return jsonify(output), 200
 	# return jsonify({'msg': 'No groups exist.'}), 409
 
+
+
+##### Group messages
+## WebSockets
+@socketio.on("connect")
+def connect():
+	print("client connected")
+
+
+@socketio.on("join")
+def join_socket(data):
+	username = data["username"]
+	room = data["group"]
+	join_room(room)
+	send(username + " has joined room " + room, to=room)
+	print(username + " joined " + room)
+
+@socketio.on("recieve")
+def send_message(data):
+	print(data)
+	send({"message": data["message"], "username": data["username"]}, to=data["group"])
+
+
+
+##  Normal API calls for group messages
+@app.route("/api/v1/getGroupMessages", methods=["GET"])
+def get_groupMessage():
+	pass
+
+
+@app.route("/api/v1/sendGroupMessage", methods=["POST"])
+def send_groupMessage():
+	pass
+
+
 if __name__ == '__main__':
-	app.run(debug=True)
+	# app.run(debug=True)
+	socketio.run(app, debug=True)
