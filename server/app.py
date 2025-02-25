@@ -154,8 +154,13 @@ def get_events():
 		return jsonify(dumps(data)), 200
 	return jsonify({'msg' : 'There are no events!'})
 	
-
-
+@app.route("/api/v1/getEvent", methods=["POST"])
+def get_event():
+	event = request.get_json()
+	data = events_collection.find_one({'id' : str(event['id'])}, { "_id": 0 })
+	if data:
+		return jsonify(dumps(data)), 200
+	return jsonify({'msg' : 'Event not found'}), 404
 
 if __name__ == '__main__':
 	app.run(debug=True)

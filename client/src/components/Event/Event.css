@@ -1,0 +1,24 @@
+.event-wrapper {
+    color: white;
+    padding-top: 4rem;
+    max-width: 100vw;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.event-information {
+    height: 40rem;
+    width: 45rem;
+    background-color: red;
+}
+
+.event-participants {
+    height: 40rem;
+    width: 45rem;
+    background-color: blue;
+}
