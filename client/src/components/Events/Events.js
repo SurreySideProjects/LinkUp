@@ -41,6 +41,7 @@ function Events() {
       if (response.ok) {
         alert('Event created successfully!');
         setShowPopup(false);
+        getEvents()
         setFormData({ name: '', location: '', date: '', description: '', private: 'false' });
       } else {
         alert('Failed to create event');
