@@ -3,9 +3,11 @@ import NavBar from '../NavBar/NavBar';
 import './Events.css';
 import { IoMdClose } from "react-icons/io";
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 
 function Events() {
+  const navigate = useNavigate();
   const [eventData, setEventData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [cookies, setCookies] = useCookies([]); 
@@ -76,7 +78,7 @@ function Events() {
       <div className='events-grid'>
         { console.log(typeof(eventData), eventData) || eventData.length > 0 ? (
           eventData.map((event, index) => (
-            <div className='event-card' key={index}>
+            <div className='event-card' onClick={() => navigate(`/events/${event.id}`)} key={index}>
               <h3 className='event-name'>{event.name}</h3>
               <p className='event-location'>📍 {event.location}</p>
               <p className='event-date'>📅 {event.date}</p>

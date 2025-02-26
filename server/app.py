@@ -162,5 +162,32 @@ def get_event():
 		return jsonify(dumps(data)), 200
 	return jsonify({'msg' : 'Event not found'}), 404
 
+@app.route("/api/v1/addPersonToEvent", methods=["POST"])
+def add_personToEvent():
+	data = request.get_json()
+	participants = events_collection.find_one({'id' : str(data['id'])}, { "_id": 0 })['participants']
+	if data['username'] in participants:
+		return jsonify({'msg' : 'User already in event'}), 401
+	else:
+		participants.append(data['username'])
+	if data:
+		events_collection.update_one({'id' : data['id']} , { '$set': {'participants' : participants}})
+		return jsonify({'msg' : 'User added to event'}), 200
+	return jsonify({'msg' : 'Event not found'}), 404
+
+@app.route("/api/v1/removePersonFromEvent", methods=["POST"])
+def removePersonFromEvent():
+	data = request.get_json()
+	print(data)
+	participants = events_collection.find_one({'id' : str(data['id'])}, { "_id": 0 })['participants']
+	if data['username'] in participants:
+		participants.remove(data['username'])
+	else:
+		return jsonify({'msg' : 'User not in event'}), 401
+	if data:
+		events_collection.update_one({'id' : data['id']} , { '$set': {'participants' : participants}})
+		return jsonify({'msg' : 'User removed from event'}), 200
+	return jsonify({'msg' : 'Event not found'}), 404
+
 if __name__ == '__main__':
 	app.run(debug=True)

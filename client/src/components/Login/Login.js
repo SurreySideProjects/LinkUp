@@ -42,7 +42,7 @@ const Login = () => {
         },
         { withCredentials: true }
       ).then(response => {
-        setToken('token', response.data.access_token)
+        setToken('token', response.data.access_token, { path: '/' })
         console.log("logged in", response.data.access_token)
         const message = "Login successful!";
         handleSuccess(message);
