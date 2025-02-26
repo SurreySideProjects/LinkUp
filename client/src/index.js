@@ -8,6 +8,7 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Groups from './components/Groups/Groups';
 import Events from './components/Events/Events';
+import Event from './components/Event/Event';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,6 +19,7 @@ root.render(
         <Route path="/register" element={<Register />}/>
         <Route path="/groups" element={<Groups />}/>
         <Route path="/events" element={<Events />}/>
+        <Route path="/events/:id" element={<Event />}/>
         <Route path="*" element={<NoPage />} />
     </Routes>
   </BrowserRouter>

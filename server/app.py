@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 from pymongo import MongoClient
+from bson.json_util import dumps
 import os
 from dotenv import load_dotenv
 from flask_socketio import SocketIO, emit, join_room, send, leave_room
@@ -27,10 +28,10 @@ db = client["PartyVerse"]
 users_collection = db["users"]
 groups_collection = db["groups"]
 groupUsers_collection = db["groupUsers"]
+events_collection = db["events"]
 groupMessages_collection = db["groupMessages"]
 
-
-
+#-----------------USERS SECTION------------
 @app.route("/api/v1/users", methods=["POST"])
 def register():
 	new_user = request.get_json() # store the json body request
@@ -65,8 +66,6 @@ def profile():
 		return jsonify({'profile' : user_from_db['username'] }), 200
 	else:
 		return jsonify({'msg': 'Profile not found'}), 404
-
-
 
 
 ##### GROUP and GROUPUSER
@@ -239,6 +238,72 @@ def get_groupMessage():
 def send_groupMessage():
 	pass
 
+#-----------------EVENTS SECTION------------
+@app.route("/api/v1/createEvent", methods=["POST"])
+@jwt_required()
+def create_event():
+	username = get_jwt_identity()
+	if not username:
+		return jsonify({'msg': 'You are not a valid user'}), 401
+	new_event = request.get_json()
+	highest_id = events_collection.find_one({"$query":{},"$orderby":{"id":-1}})
+	id = highest_id["id"] + 1 if highest_id else 1
+
+	event = {
+		"id" : "{}".format(id),
+		"owner" : username,
+		"name" : new_event["name"],
+		"location" : new_event["location"],
+		"date" : new_event["date"],
+		"participants" : [],
+		"description" : new_event["description"],
+		"private" : new_event["private"]
+	}
+
+	events_collection.insert_one(event)
+	return jsonify({'msg': 'Event created.'}), 200
+	
+@app.route("/api/v1/getEvents", methods=["get"])
+def get_events():
+	data = events_collection.find({}, { "_id": 0 })
+	if data:
+		return jsonify(dumps(data)), 200
+	return jsonify({'msg' : 'There are no events!'})
+	
+@app.route("/api/v1/getEvent", methods=["POST"])
+def get_event():
+	event = request.get_json()
+	data = events_collection.find_one({'id' : str(event['id'])}, { "_id": 0 })
+	if data:
+		return jsonify(dumps(data)), 200
+	return jsonify({'msg' : 'Event not found'}), 404
+
+@app.route("/api/v1/addPersonToEvent", methods=["POST"])
+def add_personToEvent():
+	data = request.get_json()
+	participants = events_collection.find_one({'id' : str(data['id'])}, { "_id": 0 })['participants']
+	if data['username'] in participants:
+		return jsonify({'msg' : 'User already in event'}), 401
+	else:
+		participants.append(data['username'])
+	if data:
+		events_collection.update_one({'id' : data['id']} , { '$set': {'participants' : participants}})
+		return jsonify({'msg' : 'User added to event'}), 200
+	return jsonify({'msg' : 'Event not found'}), 404
+
+@app.route("/api/v1/removePersonFromEvent", methods=["POST"])
+def removePersonFromEvent():
+	data = request.get_json()
+	print(data)
+	participants = events_collection.find_one({'id' : str(data['id'])}, { "_id": 0 })['participants']
+	if data['username'] in participants:
+		participants.remove(data['username'])
+	else:
+		return jsonify({'msg' : 'User not in event'}), 401
+	if data:
+		events_collection.update_one({'id' : data['id']} , { '$set': {'participants' : participants}})
+		return jsonify({'msg' : 'User removed from event'}), 200
+	return jsonify({'msg' : 'Event not found'}), 404
 
 if __name__ == '__main__':
 	# app.run(debug=True)

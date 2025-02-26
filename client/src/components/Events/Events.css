@@ -5,3 +5,211 @@
     color: white;
     background: rgba(0,0,0,0);
 }
+
+/* Create Event Button */
+.create-btn {
+    position: absolute;
+    top: 5rem;
+    right: 2rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ff2592e7, #fe00e9);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Hover effect */
+.create-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+}
+  
+/* Event Cards Grid */
+.events-grid {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns per row */
+    gap: 2rem; /* Space between cards */
+    padding: 2rem;
+    max-width: 1000px; 
+    margin: 0 auto; /* Center grid */
+    justify-items: center; /* Center items horizontally */
+}
+
+/* Event Card */
+.event-card {
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+    color: white;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    width: 400px; /* Fixed width for consistency */
+    min-height: 220px; 
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+}
+
+/* Event Card Content Styling */
+.event-name {
+    font-size: 2rem; /* Larger title */
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.event-location, .event-date, .event-participants {
+    font-size: 1.25rem; /* Larger text for details */
+    margin-top: 0.5rem;
+}
+
+/* Different Gradient Colors for Cards */
+.event-card:nth-child(1) {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+.event-card:nth-child(2) {
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+}
+.event-card:nth-child(3) {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+.event-card:nth-child(4) {
+    background: linear-gradient(135deg, #84fab0, #8fd3f4);
+}
+.event-card:nth-child(5) {
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+}
+
+/* Centering the Event Cards */
+.events-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+  
+  /* No Events Placeholder */
+  .no-events {
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    padding: 2rem;
+  }
+
+.popup {
+    position: fixed;
+    inset: 0;
+    padding-bottom: 3rem;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    width: 400px; /* Set a fixed width for the form */
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.popup-form h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.popup-form input, 
+.popup-form select, 
+.popup-form textarea {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.popup-form textarea {
+    resize: vertical;
+    min-height: 120px; /* Set a minimum height for the textarea */
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.popup-form input:focus,
+.popup-form textarea:focus,
+.popup-form select:focus {
+    outline: none;
+    box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.2);
+}
+
+.popup-form button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(190, 13, 96);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-form button:hover {
+    background-color: #45a049;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: black;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
