@@ -15,7 +15,7 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    verified: false
+    verified: true // CHANGE THIS BACK TO true LATER ! 
   });
   const { email, username, password } = inputValue;
   const handleOnChange = (e) => {

@@ -10,7 +10,7 @@ import { PiHandPalmThin } from "react-icons/pi";
 
 const App = () => {
   const navigate = useNavigate();
-  const [cookies, removeCookie] = useCookies([]);
+  const [cookies, setCookie] = useCookies([]);
   const [username, setUsername] = useState("");
 
   const welcomeMsg = (msg) =>
@@ -28,17 +28,17 @@ const App = () => {
         { withCredentials: true, headers: { 'Authorization': `Bearer ${cookies.token}`} }
       ).then(response => {
         const user = response.data.profile;
+        setCookie("user", user)
         setUsername(user);
-        welcomeMsg(`Welcome ${user}`)
       })
       .catch(error => {
         console.log("Please login again!", error)
-        return [removeCookie("token"), navigate("/login")];
+        return [setCookie("token"), navigate("/login")];
       });
     }
     };
     verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  }, [cookies, navigate, setCookie]);
 
   return (
     <>

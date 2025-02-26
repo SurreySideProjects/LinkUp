@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 import os
 from dotenv import load_dotenv
+from flask_socketio import SocketIO, emit, join_room, send, leave_room
 
 load_dotenv()
 MONGO_URL = os.getenv('MONGO_URL')
@@ -18,13 +19,17 @@ jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=7) #Token expires in 7 days
 
-#Connection
+#WebSockets
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+#DB Connection
 client = MongoClient(MONGO_URL)
 db = client["PartyVerse"]
 users_collection = db["users"]
 groups_collection = db["groups"]
 groupUsers_collection = db["groupUsers"]
 events_collection = db["events"]
+groupMessages_collection = db["groupMessages"]
 
 #-----------------USERS SECTION------------
 @app.route("/api/v1/users", methods=["POST"])
@@ -32,6 +37,7 @@ def register():
 	new_user = request.get_json() # store the json body request
 	new_user["password"] = hashlib.sha256(new_user["password"].encode("utf-8")).hexdigest() # encrpt password
 	doc = users_collection.find_one({"username": new_user["username"]}) # check if user exist
+	print(new_user)
 	if not doc:
 		users_collection.insert_one(new_user)
 		return jsonify({'msg': 'User created successfully'}), 201
@@ -61,10 +67,11 @@ def profile():
 	else:
 		return jsonify({'msg': 'Profile not found'}), 404
 
-#-----------------GROUPS SECTION------------
+
+##### GROUP and GROUPUSER
 @app.route("/api/v1/createGroup", methods=["POST"]) # for now, gorups have primary key of name, but will change later
-@jwt_required()
-def createGroup():
+# @jwt_required()
+def create_group():
 	new_group = request.get_json()
 	doc = groups_collection.find_one({"name": new_group["name"]}) # check if group exist
 	creater = users_collection.find_one({'username' : new_group["username"]})
@@ -81,13 +88,13 @@ def createGroup():
 			"role": "admin",
 		}
 		groupUsers_collection.insert_one(new_groupUser)
-		return jsonify({'msg': 'Group was created successfully'}), 201
+		return jsonify({'msg': 'Group was created successfully'}), 200
 	else:
 		return jsonify({'msg': 'Group name already exists'}), 409
 
 @app.route("/api/v1/addUserToGroup", methods=["POST"])
 @jwt_required(optional=True)
-def createGroupUser():
+def create_group_user():
 	new_groupUser = request.get_json()
 
 	new_groupUser["groupID"] = groups_collection.find_one({"name": new_groupUser["groupname"]})["_id"]  # this must change if groupname is not unique!!
@@ -97,7 +104,6 @@ def createGroupUser():
 		new_groupUser["role"] = "member"
 	
 	result = groupUsers_collection.find_one({"groupID": new_groupUser["groupID"], "userID": new_groupUser["userID"]})
-	print(not result)
 	if not result and (new_groupUser["groupID"] or new_groupUser["userID"]): # if there isnt a groupUser with identical ID's, and ID's actually exist
 		del new_groupUser["groupname"], new_groupUser["username"]
 		groupUsers_collection.insert_one(new_groupUser)
@@ -107,11 +113,11 @@ def createGroupUser():
 			{"$inc": {"numOfMembers": 1}}
 		)
 
-		return jsonify({'msg': 'User was successfully added to the Group'}), 201
+		return jsonify({'msg': 'User was successfully added to the Group'}), 200
 	else: 
 		return jsonify({'msg': 'Error while adding user to group. User was not added.'}), 409
 
-@app.route("/api/v1/getGroups", methods=["get"])
+@app.route("/api/v1/getGroups", methods=["GET"])
 def get_groups():
 	groups = list(groups_collection.find())
 	if groups:
@@ -121,6 +127,116 @@ def get_groups():
 		return jsonify(groups), 200
 	return jsonify({'msg': 'No groups exist.'}), 409
 
+@app.route("/api/v1/getGroup", methods=["GET"])
+def get_group():
+	name = request.args.get("name")
+	group = groups_collection.find_one({"name": name})
+	if group:
+		group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+		del group["_id"], group["userID"]
+		return jsonify(group), 200
+	return jsonify({'msg': 'This group does not exist. Group name could not be found.'}), 409
+
+@app.route("/api/v1/searchGroups", methods=["GET"])
+def search_groups():
+	search = request.args.get("search")
+	groups = list(groups_collection.find())
+	output = []
+	if groups and search:
+		for group in groups:
+			if search in group["name"]: 
+				group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+				del group["_id"], group["userID"]
+				output.append(group)
+			elif search in group["description"]: 
+				group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+				del group["_id"], group["userID"]
+				output.append(group)
+		return jsonify(output), 200
+	return jsonify({'msg': 'No groups exist.'}), 409
+
+@app.route("/api/v1/getGroupByUser", methods=["GET"])
+def get_users_groups(): # This feels like a very unsafe function...
+	userID = request.args.get("userID") # must include either "userID" or "username"
+	if not userID:
+		username = request.args.get("username")
+		print(username)
+		userID = users_collection.find_one({"username": username})["_id"]
+
+	output = []
+	groupUsers = groupUsers_collection.find({"userID": userID})
+
+	# groups = list(groups_collection.find({"_id": {"$in": [groupUser["groupID"] for groupUser in groupUsers]}})) cant use this cos i hvae to iterate and convert objects to strings anyway
+	for groupUser in groupUsers:
+		group = groups_collection.find_one({"_id": groupUser["groupID"]})
+		group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+		del group["_id"], group["userID"]
+		output.append(group)
+	if output: 
+		return jsonify(output), 200
+	return jsonify({'msg': 'No groups exist.'}), 409
+	# for groupID in groupIDs:
+
+@app.route("/api/v1/isUserInGroup")
+def is_user_in_group():
+	userID = request.args.get("userID") # must include either "userID" or "username"
+	groupID = request.args.get("groupID")
+	if not userID:
+		username = request.args.get("username")
+		userID = users_collection.find_one({"username": username})["_id"]
+
+	if not groupID:
+		groupname = request.args.get("groupname")
+		groupID = groups_collection.find_one({"name": groupname})["_id"]
+
+	groupUsers = groupUsers_collection.find_one({"userID": userID, "groupID": groupID})
+	if groupUsers: 
+		return jsonify({"joined": True}), 200
+	return jsonify({'joined': False}), 200
+
+	# groups = list(groups_collection.find({"_id": {"$in": [groupUser["groupID"] for groupUser in groupUsers]}})) cant use this cos i hvae to iterate and convert objects to strings anyway
+	# for groupUser in groupUsers:
+	# 	group = groups_collection.find_one({"_id": groupUser["groupID"]})
+	# 	group["creator"] = users_collection.find_one({"_id": group["userID"]})["username"]
+	# 	del group["_id"], group["userID"]
+	# 	output.append(group)
+	# if output: 
+	# 	return jsonify(output), 200
+	# return jsonify({'msg': 'No groups exist.'}), 409
+
+
+
+##### Group messages
+## WebSockets
+@socketio.on("connect")
+def connect():
+	print("client connected")
+
+
+@socketio.on("join")
+def join_socket(data):
+	username = data["username"]
+	room = data["group"]
+	join_room(room)
+	send(username + " has joined room " + room, to=room)
+	print(username + " joined " + room)
+
+@socketio.on("recieve")
+def send_message(data):
+	print(data)
+	send({"message": data["message"], "username": data["username"]}, to=data["group"])
+
+
+
+##  Normal API calls for group messages
+@app.route("/api/v1/getGroupMessages", methods=["GET"])
+def get_groupMessage():
+	pass
+
+
+@app.route("/api/v1/sendGroupMessage", methods=["POST"])
+def send_groupMessage():
+	pass
 
 #-----------------EVENTS SECTION------------
 @app.route("/api/v1/createEvent", methods=["POST"])
@@ -190,4 +306,5 @@ def removePersonFromEvent():
 	return jsonify({'msg' : 'Event not found'}), 404
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	# app.run(debug=True)
+	socketio.run(app, debug=True)

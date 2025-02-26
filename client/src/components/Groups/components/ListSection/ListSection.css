@@ -1,0 +1,131 @@
+/* .search-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+  }
+  
+  .search-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .search-input-wrapper {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+  }
+  
+  .search-input-wrapper:focus-within {
+    border-color: rgb(190, 13, 96);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  .search-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #9ca3af;
+    margin-right: 0.75rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #1f2937;
+  }
+  
+  .search-input::placeholder {
+    color: #9ca3af;
+  }
+   */
+  .search-button {
+    padding: 0.75rem 1.5rem;
+    background-color: rgb(190, 13, 96);
+    color: white;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .search-button:hover {
+    background-color: #2563eb;
+  }
+  
+  .search-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  }
+  
+  .results-container {
+    margin-top: 1.5rem;
+  }
+  
+  .results-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .group-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .group-button:hover {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+    transform: translateY(-1px);
+  }
+  
+  .group-name {
+    font-size: 1rem;
+    color: #1f2937;
+    font-weight: 500;
+  }
+  
+  .arrow-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #6b7280;
+    transition: transform 0.2s;
+  }
+  
+  .group-button:hover .arrow-icon {
+    transform: translateX(2px);
+    color: #3b82f6;
+  }
+  
+  .no-results {
+    text-align: center;
+    color: #6b7280;
+    /* padding: 2rem; */
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+  
+  @media (max-width: 640px) {
+    .search-bar {
+      flex-direction: column;
+    }
+    
+    .search-button {
+      width: 100%;
+    }
+  }
