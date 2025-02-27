@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ListSection.css";
 import axios from "axios";
-import { FaGrimace } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 
 const getUsersGroups = async(username) => { // this can also be placed inside main function
@@ -20,11 +19,11 @@ const getUsersGroups = async(username) => { // this can also be placed inside ma
 }
 
 function ListSection({setMode, setGroupData}){ 
-    const [cookies, removeCookie] = useCookies();
+    const [cookies, ] = useCookies();
     const [groupsData, setGroupsData] = useState([])
 
 
-
+    // eslint-disable-next-line
     const handleRefreshGroups = async(e) =>{ // refresh button 
         const groups = await getUsersGroups(cookies.user); 
         setGroupsData(groups);
@@ -40,7 +39,7 @@ function ListSection({setMode, setGroupData}){
         setGroupsData(groups)
         }
         fetchGroups()
-    }, [])
+    }, [cookies.user])
      
 
     return (

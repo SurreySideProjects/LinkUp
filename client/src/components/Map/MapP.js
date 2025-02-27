@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { MapContainer, TileLayer, useMap, Popup, Marker } from 'react-leaflet'
+import React, { useEffect} from 'react'
+import { MapContainer, TileLayer, useMap} from 'react-leaflet'
 import Geolocation from '@react-native-community/geolocation';
 import './MapP.css';
 
-function MyComponent({}) {
+function MyComponent() {
   const map = useMap();
 
   useEffect(() => {
-    Geolocation.getCurrentPosition( position => { 
+    Geolocation.getCurrentPosition( position => { position &&
       map.setView([position.coords.latitude, position.coords.longitude], 14);
     })
-  }, []);
+  }, [map]);
 }
 
 function MapP() {

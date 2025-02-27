@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./ChatSection.css";
-import axios from "axios";
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { io } from "socket.io-client";
 
 const socket = io("http://localhost:5000")
 
 function ChatSection({ groupData }){ 
-    const [cookies, removeCookie] = useCookies();
+    const [cookies, ] = useCookies();
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([])
 

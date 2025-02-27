@@ -10,7 +10,7 @@ function Events() {
   const navigate = useNavigate();
   const [eventData, setEventData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [cookies, setCookies] = useCookies([]); 
+  const [cookies, ] = useCookies([]); 
   const [formData, setFormData] = useState({
     name: '',
     location: '',
@@ -69,7 +69,7 @@ function Events() {
 
   return (
     <>
-      <img id='back' src='background.svg'/>
+      <img id='back' alt='' src='background.svg'/>
       <NavBar/>
       <div className='events'>
         <button className='create-btn' onClick={() => setShowPopup(true)}>Create Event</button>

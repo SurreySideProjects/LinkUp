@@ -37,7 +37,7 @@ function SearchSection({handleGroupButton}) {
 
 
   return (
-    <div> //className="search-container"
+    <div> {/*className="search-container"*/}
       <div className="search-bar">
         <div className="search-input-wrapper">
           <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">

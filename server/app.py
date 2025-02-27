@@ -30,6 +30,7 @@ groups_collection = db["groups"]
 groupUsers_collection = db["groupUsers"]
 events_collection = db["events"]
 groupMessages_collection = db["groupMessages"]
+requests_collection = db["requests"]
 
 #-----------------USERS SECTION------------
 @app.route("/api/v1/users", methods=["POST"])
@@ -294,7 +295,6 @@ def add_personToEvent():
 @app.route("/api/v1/removePersonFromEvent", methods=["POST"])
 def removePersonFromEvent():
 	data = request.get_json()
-	print(data)
 	participants = events_collection.find_one({'id' : str(data['id'])}, { "_id": 0 })['participants']
 	if data['username'] in participants:
 		participants.remove(data['username'])
@@ -304,6 +304,35 @@ def removePersonFromEvent():
 		events_collection.update_one({'id' : data['id']} , { '$set': {'participants' : participants}})
 		return jsonify({'msg' : 'User removed from event'}), 200
 	return jsonify({'msg' : 'Event not found'}), 404
+
+
+#----Requests section-------
+@app.route("/api/v1/newRequest", methods=["POST"])
+def newRequest():
+	data = request.get_json()
+	check = requests_collection.find_one({"id" : data['id'], 'username' : data['username']})
+	if check:
+		return jsonify({'msg' : 'Request already sent'}), 401
+	if data:
+		requests_collection.insert_one({"id" : data['id'], 'username' : data['username'], 'date': datetime.datetime.now()})
+		return jsonify({'msg' : 'Request sent'}), 200
+	else:
+		return jsonify({'msg' : 'Resquest missing information'}), 401
+	
+@app.route("/api/v1/getRequests", methods=["POST"])
+def getRequests():	
+	data = request.get_json()
+	requests = requests_collection.find({'id': data['id']}, { "_id": 0 })
+	return jsonify(dumps(requests)), 200
+
+@app.route("/api/v1/removeRequest", methods=["POST"])
+def removeRequest():
+	data = request.get_json()
+	if data:
+		requests_collection.delete_one({'id': data['id'], 'username': data['username']})
+		return jsonify({'msg' : 'User request removed'}), 200
+	else:
+		return jsonify({'msg' : 'No such request'}), 401
 
 if __name__ == '__main__':
 	# app.run(debug=True)

@@ -5,16 +5,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import { PiHandPalmThin } from "react-icons/pi";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies([]);
   const [username, setUsername] = useState("");
-
-  const welcomeMsg = (msg) =>
-    toast(msg, {icon: <PiHandPalmThin size={50}/>});
 
   useEffect(() => {
     const verifyCookie = async () => {

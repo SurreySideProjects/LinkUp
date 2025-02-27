@@ -8,7 +8,7 @@ import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useCookies(['token']);
+  const [, setToken] = useCookies(['token']);
   const [userMessage, setUserMessage] = useState("")
 
   const [inputValue, setInputValue] = useState({
