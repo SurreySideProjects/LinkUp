@@ -138,8 +138,122 @@
     color: #ff6b6b;
 }
 
+.event-requests-wrapper {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    padding-top: 3rem; /* Adds top padding */
+    width: 100%; /* Ensures full width for proper centering */
+}
+
+.event-requests {
+    width: 40rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.event-requests:hover {
+    transform: translateY(-5px);
+}
+
+#request-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f8f9fa;
+    border-bottom: 2px solid #f8f9fa;
+    padding-bottom: 0.5rem;
+    width: 100%;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+#event-requestList {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+#event-requestList li {
+    display: flex;
+    justify-content: space-between; /* Pushes text left & buttons right */
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #e0e0e0;
+    transition: background 0.3s ease-in-out;
+}
+
+#event-requestList li:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Button Container */
+.request-buttons {
+    display: flex;
+    gap: 0.5rem; /* Space between buttons */
+}
+
+/* Buttons */
+#accept-request-button, 
+#deny-request-button {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Accept Button (Green Glow) */
+#accept-request-button {
+    color: #32d74b; /* Apple Green */
+    text-shadow: 1px 1px 4px rgba(50, 215, 75, 0.5);
+}
+
+#accept-request-button:hover {
+    background: rgba(50, 215, 75, 0.3);
+    box-shadow: 0 0 8px rgba(50, 215, 75, 0.9);
+    transform: scale(1.1);
+}
+
+/* Deny Button (Red Glow) */
+#deny-request-button {
+    color: #ff453a; /* Apple Red */
+    text-shadow: 1px 1px 4px rgba(255, 69, 58, 0.5);
+}
+
+#deny-request-button:hover {
+    background: rgba(255, 69, 58, 0.3);
+    box-shadow: 0 0 8px rgba(255, 69, 58, 0.9);
+    transform: scale(1.1);
+}
+
+/* Button Active Effect */
+#accept-request-button:active, 
+#deny-request-button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
 
 /* Responsive design */
+@media (max-width: 768px) {
+    .event-requests {
+        width: 90%;
+    }
+}
+
 @media (max-width: 768px) {
     .event-wrapper {
         flex-direction: column;

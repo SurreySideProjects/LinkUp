@@ -21,7 +21,7 @@ const isUserInGroup = async(username, groupname) =>{
 }
 
 function InspectSection({ groupData, setUserMode }) {
-  const [cookies, setCookie] = useCookies();
+  const [cookies, ] = useCookies();
   const [isJoined, setIsJoined] = useState()
 
 

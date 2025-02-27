@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./GraphSection.css";
 import axios from "axios";
 import ForceGraph2D from "react-force-graph-2d"; 
-import { FaRegGrinTongueWink } from "react-icons/fa";
-import { MdOutlineUpdateDisabled } from "react-icons/md";
 import { useCookies } from "react-cookie";
 
 const getUsersGroups = async(username) => { // this can also be placed inside main function
@@ -21,7 +19,7 @@ const getUsersGroups = async(username) => { // this can also be placed inside ma
 }
 
 function GraphSection({setMode, setGroupData}){ 
-    const [cookies, removeCookie] = useCookies();
+    const [cookies, ] = useCookies();
     const [groupsData, setGroupsData] = useState([])
     const [graphData, setGraphData] = useState({nodes: [
           { id: "1", name: "Group 1", numOfUsers: 1, group: 1},
@@ -36,6 +34,7 @@ function GraphSection({setMode, setGroupData}){
 
     const pinky = "rgb(190, 13, 96)";
 
+    // eslint-disable-next-line
     const handleRefreshGroups = async(e) =>{ // refresh button 
         const groups = await getUsersGroups(cookies.user); 
         setGroupsData(groups);
@@ -57,7 +56,7 @@ function GraphSection({setMode, setGroupData}){
         console.log("holder", graphDataHolder);
         }
         fetchGroups()
-    }, [])
+    }, [cookies.user])
 
     return (
           <div className="results-container">
