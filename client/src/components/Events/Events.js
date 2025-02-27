@@ -10,7 +10,9 @@ function Events() {
   const navigate = useNavigate();
   const [eventData, setEventData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [cookies, ] = useCookies([]); 
+  const [cookies, ] = useCookies([], {
+    path: '/',
+  }); 
   const [formData, setFormData] = useState({
     name: '',
     location: '',

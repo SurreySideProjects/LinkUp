@@ -24,7 +24,7 @@ const App = () => {
         { withCredentials: true, headers: { 'Authorization': `Bearer ${cookies.token}`} }
       ).then(response => {
         const user = response.data.profile;
-        setCookie("user", user)
+        setCookie("user", user, {path:'/'})
         setUsername(user);
       })
       .catch(error => {

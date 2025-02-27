@@ -8,7 +8,9 @@ import { ToastContainer, toast } from "react-toastify";
 
 function Event() {
     const navigate = useNavigate();
-    const [cookies, ] = useCookies(['token']);
+    const [cookies, ] = useCookies(['token'], {
+        path: '/',
+      });
     const [eventData, setEventData] = useState()
     const [requests, setRequests] = useState()
     const [username, setUsername] = useState()
@@ -211,7 +213,7 @@ function Event() {
         ) : (
             <p>Loading event data...</p>
         )}
-        {requests && eventData && username === eventData.owner ? (
+        {requests && eventData && eventData.private === "true" && username === eventData.owner ? (
         <div className='event-requests-wrapper'>
             <div className='event-requests'>
                 <p id='request-title'>Requests</p>
@@ -227,7 +229,7 @@ function Event() {
                             </li>
                         ))
                     ) : (
-                        <p>No requests</p>
+                        <p style={{color : "white"}}>No requests</p>
                     )}
                 </ul>
             </div>
